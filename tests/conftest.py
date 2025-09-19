@@ -1,0 +1,21 @@
+# Copyright 2025 XMOS LIMITED.
+# This Software is subject to the terms of the XMOS Public Licence: Version 1.
+import pytest
+
+@pytest.fixture
+def verbosity(pytestconfig):
+    return (pytestconfig.getoption("verbose") or 0)
+
+@pytest.fixture
+def level(request):
+    return request.config.getoption("--level")
+
+def pytest_addoption(parser):
+
+    parser.addoption(
+        "--level",
+        action="store",
+        default="smoke",
+        choices=["smoke", "default", "extended"],
+        help="Test coverage level",
+    )

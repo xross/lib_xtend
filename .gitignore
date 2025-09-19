@@ -1,0 +1,57 @@
+trace.txt
+*.md
+bin.txt
+platform_def.xn
+program_info.txt
+user_module_bin.txt
+xscope.xscope
+
+# Tmp files & logs
+*.settings
+*.bin
+*.zip
+*.log
+*.vcd
+*.swp
+*.*~
+*.xmt
+*.swo
+*.swn
+*~
+*.DS_Store
+
+# Python
+*.pyc
+**/*.egg-info/
+**/.venv*/
+
+# XMOS temp files
+**/*build*/*
+*/bin/*
+**/flash_bin_node*
+**/fw-*
+**/s2l-*
+**/spanning-xn-*
+**/target-xn*
+*.xi
+*.o
+*.i
+*.a
+*.d
+*.decouple
+*.pca.xml
+**/CMakeFiles/*
+*.elf
+*.swmem
+
+# XMOS binaries
+*.xe
+*.xb
+
+# Built documentation
+doc/_build/pdf/*.pdf
+**/doc/pdf/*.pdf
+tests/test_xplug_basic/src/xplugin_blob.h
+tests/test_xplug_global/src/xplugin_blob.h
+tests/test_xplug_resource/src/xplugin_blob.h
+tests/test_xplug_print/src/xplugin_blob.h
