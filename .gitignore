@@ -3,8 +3,10 @@ trace.txt
 bin.txt
 platform_def.xn
 program_info.txt
-user_module_bin.txt
 xscope.xscope
+devl-*
+spispec-*
+*.ppb
 
 # Tmp files & logs
 *.settings

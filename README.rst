@@ -39,16 +39,17 @@ TODO
 
 * More complex example using I2C, for example
 * Documentation
-* Use a single tile xn when building the blob
+* Use a single tile xn when building the xtender
 * Remove debug prints (use lib_logging)
 * Make tests use some shared code...
 * Add hashing for function names
 * Run destructors
-* Automate function count in user code?
+* Automate function count in user code(?)
 * Security features
 * Allow export table to live anywhere in the binary(?_
 * Blob checking - checksum/signature etc
 * Can we get a free CRC from from an xflash upgrade image?
+  * Use aprogram running in xsim to generate the CRC?
 * Patch plugin for syscalls? (or find another soluton)
 
 Missing Tests

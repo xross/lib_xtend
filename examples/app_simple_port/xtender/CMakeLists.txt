@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 project(xtender)
 
-set(APP_HW_TARGET XU316-1024-QF60B-C24)
+set(APP_HW_TARGET XU316-1024-FB265-C32)
 
 set(APP_COMPILER_FLAGS  -O0
                         -mno-dual-issue
