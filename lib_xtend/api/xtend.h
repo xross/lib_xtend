@@ -76,7 +76,7 @@ typedef enum xtend_status {
 /* Read an xtender from flash
  * Returns 0 on success, else flash error code
  */
-int xtend_load(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size);
+int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size);
 
 /* Parse & validate an export table blob. Returns XTEND_OK on success. */
 xtend_status_t xtend_init(const uint8_t *blob, xtend_table_t *t);

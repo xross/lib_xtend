@@ -1,13 +1,13 @@
 :orphan:
 
-########################
-lib_xplug: Plugin system
-########################
+#######################
+lib_xtnd: Plugin system
+#######################
 
 :vendor: @xross
 :version: 0.0.1
 :scope: Demo
-:description: Plugin system
+:description: Plugin-like system for xcore
 :category: Gerneral purpose
 :keywords:
 :devices: xcore-200, xcore.ai
@@ -16,7 +16,7 @@ lib_xplug: Plugin system
 Summary
 *******
 
-``lib_xtend`` allows load and execution of code from flash (not XIP) where the whole application is
+``lib_xtnd`` (xcore Tactical Node Delivery) allows load and execution of code from flash (not XIP) where the whole application is
 not known at compile time. This is useful for applications that wish to allow some limited form of
 extensibililty by a user, for example for adding custom code to an ASSP.
 
@@ -24,7 +24,7 @@ extensibililty by a user, for example for adding custom code to an ASSP.
 Features
 ********
 
-* Provides an easy way to bundle and call code from a plugin (or "extender") binary
+* Provides an easy way to bundle and call code from a plugin (or "xtender") binary
 * No special tools or libraries required to build or use
 * Safely runs plugin code without mixing up program’s data
 * Look up plugin functions by simple names

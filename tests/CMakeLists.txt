@@ -38,4 +38,5 @@ add_subdirectory(test_xtend_basic)
 add_subdirectory(test_xtend_global)
 add_subdirectory(test_xtend_resource)
 add_subdirectory(test_xtend_print)
+add_subdirectory(test_xtend_interface)
 

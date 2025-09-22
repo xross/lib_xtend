@@ -57,3 +57,4 @@ tests/test_xplug_basic/src/xplugin_blob.h
 tests/test_xplug_global/src/xplugin_blob.h
 tests/test_xplug_resource/src/xplugin_blob.h
 tests/test_xplug_print/src/xplugin_blob.h
+tests/test_xtend_interface/src/xtend_blob.h
