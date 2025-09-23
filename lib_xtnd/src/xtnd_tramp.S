@@ -1,4 +1,4 @@
-#include "xtend.h"
+#include "xtnd.h"
 
 .globl xtend_call
 .type  xtend_call, @function

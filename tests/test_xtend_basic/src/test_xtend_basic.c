@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <print.h>
-#include "xtend.h"
+#include "xtnd.h"
 
 #include "xtend_blob.h"
 

@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include "print.h"
-#include "xtend.h"
+#include "xtnd.h"
 #include "xcore/hwtimer.h"
 #include "quadflash.h"
 

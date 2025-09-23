@@ -1,11 +1,11 @@
 :orphan:
 
-#######################
-lib_xtnd: Plugin system
-#######################
+###########################
+lib_xtnd: Plugins for xcore
+###########################
 
 :vendor: @xross
-:version: 0.0.1
+:version: 0.1.0
 :scope: Demo
 :description: Plugin-like system for xcore
 :category: Gerneral purpose
@@ -26,7 +26,6 @@ Features
 
 * Provides an easy way to bundle and call code from a plugin (or "xtender") binary
 * No special tools or libraries required to build or use
-* Safely runs plugin code without mixing up program’s data
 * Look up plugin functions by simple names
 * Runs plugin “startup” functions (constructors) when loaded such that resource such as ports can
   be used
@@ -104,4 +103,4 @@ Related application notes
 Support
 *******
 
-Issues can be raised against the software at using GitHub `issues <https://github.com/xross/lib_template/issues>`_.
+Issues can be raised against the software at using GitHub `issues <https://github.com/xross/lib_xtnd/issues>`_.

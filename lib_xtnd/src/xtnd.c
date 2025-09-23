@@ -1,4 +1,4 @@
-#include "xtend.h"
+#include "xtnd.h"
 
 /* Runs contructors from ctors table
  * Returns number run, or -1 on error

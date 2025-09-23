@@ -6,59 +6,64 @@ lib_xtnd: Plugins for xcore
 Introduction
 ************
 
-``lib_xtnd`` provides extension mechanism for `xcore` based ASSP's via a plugin-like framework.
-It's allows code to be build and executed wihout needing to have access to the full application
+.. note::
+
+   This is an library for internal XMOS use only and is not supported for general use.
+
+``lib_xtnd`` (xcore Targeted Node Delivery) provides extension mechanism for `xcore`-based ASSP's
+via a plugin-like framework.
+It allows code to be built and executed without requiring  access to the full application
 code-base via a plugin, or "`xtender`".
 
-This is useful for producing ASSP like devices when the core funcitonality is provided and "locked
-down" but additonal functionalilty/customisation is required by a user.
+This is useful for producing ASSP like devices when the core functionality is provided and "locked
+down" but additional functionality/customisation is required by a user.
 
-The flexabilty afforded by the system allows the ASSP developer to choose what level of
-custimisation a user can provide. For example, an audio bassed ASSP may provide a an I2C interface
-with calls the the extender to provide byte arrays to be written to said interface, a call to
-`xtend_i2c_write()`, say.
+The flexibility afforded by the system allows the ASSP developer (i.e. XMOS and partners) to choose
+what level of customisation should be provided to a user.
+For example, an audio based ASSP may provide an I2C interface
+with calls the `xtender` to provide byte arrays to be written to said interface with a call to
+``xtend_get_i2c_data()``, say.
+Alternatively, the ASSP developer may chose to allow ever further customisation, encouraging the user to write
+their own CODEC access functions, be it SPI, UART or I2C, with a call to ``xtend_config_dac()``, say.
 
-The ASSP eveloper may chose allow ever futher customisation, encourangin the user to write their
-own CODEC acces functions, be it SPI, UART or I2C, a call to `xtend_config_dac()`, say.
-
-Importantly, the system requires no special tools or libraries to build ``lib_xtend`` into a
-application or to build an `xtender`, other than the standard `XMOS` XTC toolchain.
+The system requires no special tools or libraries to build ``lib_xtnd`` into a
+application or, more importantly, to build an `xtender`, other than the standard `XMOS` XTC tool chain.
 
 *****************
 Authoring an ASSP
 *****************
 
-Building with lib_xtend
+Building with lib_xtnd
 =======================
 
-``lib_xtend`` is intended to be used with the `XCommon CMake <https://www.xmos.com/file/xcommon-cmake-documentation/?version=latest>`_
+``lib_xtnd`` is intended to be used with the `XCommon CMake <https://www.xmos.com/file/xcommon-cmake-documentation/?version=latest>`_
 , the `XMOS` application build and dependency management system.
 
-To use this library in an application include ``lib_xtend`` in the application's ``APP_DEPENDENT_MODULES`` list in
+To use this library in an application include ``lib_xtnd`` in the host application's ``APP_DEPENDENT_MODULES`` list in
 `CMakeLists.txt`, for example:
 
 .. code-block:: cmake
 
-    set(APP_DEPENDENT_MODULES "lib_xtend")
+    set(APP_DEPENDENT_MODULES "lib_xtnd")
 
 .. note:: Dependent modules should be pinned to release versions where possible, otherwise the
    latest commit on the `develop` branch will be used.  For further details on managing modules,
    pinning to a release version and other options, please see the page `xcommon-cmake Dependency Management <https://www.xmos.com/documentation/XM-015090-PC/html/doc/dependency_management.html>`_.
 
-All ``lib_xtend`` functions can be accessed via the ``xtend.h`` header file, for example:
+All ``lib_xtnd`` functions can be accessed via the ``xtnd.h`` header file, for example:
 
 .. code-block:: C
 
-    #include "xtend.h"
+    #include "xtnd.h"
 
-Using lib_xtend
+Using lib_xtnd
 ===============
 
-Using ``lib_xtend`` breaks down to a few simple steps:
+Using ``lib_xtnd`` breaks down to a few simple steps:
 
 #. Load the `xtender` from flash, typically from the data partition using ``xtnd_read_flash()``
 
-#. Initialise the relevant ``lib_xtnd`` data structure with the blob read usinf ``xtnd_init()``
+#. Initialise the relevant ``lib_xtnd`` data structure with the blob read using ``xtnd_init()``
 
 #. Locate the function or functions that need to be run from the `xtender` using ``xtnd_find()``
 
@@ -68,14 +73,13 @@ Using ``lib_xtend`` breaks down to a few simple steps:
 
    If the `xtender` is not located in the data partition of the flash then implement a custom
    function to read in the `xtender` binary from the chose storage medium and pass the data to
-    ``xtend_init()``.
-
+   ``xtnd_init()``.
 
 What to provide to customisers
 ==============================
 
 * a valid extender_export.S file
-* a skeleton plugin xc/c file with empty functions
+* a skeleton plugin xc/c file with empty functions (not required, but helpful)
 * A CMakeLists.txt file to build the plugin ``xe`` and ultimately the `xtender` binary
 
 Security considerations
@@ -87,31 +91,31 @@ secure boot and secure flash to enure than only trusted code is executed on the 
 Since ``lib_xtnd`` allows custom code to be executed on the device it is important to guard against
 AES key leakage.
 
-TODO CHECK DEFAULT XBURN BEHAVIOUR AND PROVIDE GUIDANCE
+*TODO CHECK DEFAULT XBURN BEHAVIOUR AND PROVIDE GUIDANCE*
 
 Additionally it must be accepted that a malicious user may write code that attempts to run completely
 unrestricted code on the device, mimicking an unrestricted part. This risk must be accepted
-before launching an ASSP with ``lib_xtnd`` enabled however, mounting such an attack is non-trivial.
+before launching an ASSP with ``lib_xtnd`` enabled, however, mounting such an attack is non-trivial.
 
 This risk could be mitigated with a plugin signing process.
 
-*********************
+**********************
 Authoring an `xtender`
-*********************
+**********************
 
 Coding an `xtender`
-==================
+===================
 
-
-
+The ASSP provider will have provided a valid ``xtender_export.S`` file and a `xtender.c` file with
+function stubs that should be implemented.
 
 Position dependent code
 -----------------------
 
 Most code generated by the `XMOS` tool chain is position independent and therefore relocatable in
-to a plugin. However, there are some instances where position dependent code is generated, notably
+to an `xtender`. However, there are some instances where position dependent code is generated, notably
 when using XC interfaces from thread functions (function calls are called via a vtable based on
-underlying transport mechanism)
+underlying transport mechanism).
 
 A plugin binary can be scanned ensure there there is not any position dependent code using the
 following::
@@ -123,7 +127,7 @@ following::
     The `XMOS` tool chain does not support generating position independent e.g. -f PIC/PIE options
 
 If position dependent code is located then the plugin code should be modified to avoid it or the
-plugin must located in the host application at a known address. This know address should then be
+plugin must located in the host application at a known address. This known address should then be
 used when building the `xtender` binary using::
 
     -Wl, --image-base,0x123456
@@ -133,10 +137,9 @@ used when building the `xtender` binary using::
    -Wl forwards following option to the `XMOS` linker/mapper
 
 Building an `xtender`
-====================
+=====================
 
-It is recommended to use the ``xcommon-cmake`` build system like any other code base and implement
-the functions as requested by the ASSP provider.
+Like any other `XMOS` code-base, it is recommended to use the ``xcommon-cmake`` build system.
 
 .. Note::
 
@@ -155,11 +158,12 @@ completeness the steps are described below::
 The above produces a set of files including ``image_n0c0.bin`` which is the image that should be
 programmed into the flash devices data partition.
 
-..note::
+.. note::
 
-    xobjdump is provided as part of the XTC tools.
+    xobjdump is provided as part of the `xmos` tool chain
 
-For testing purposes a header file can be produced that contains the binary blob as a C array::
+For testing purposes a header file can be produced that contains the binary blob as a C array using
+``xxd``::
 
     xxd -i image_n0c0.bin > plugin_blob.h
 
@@ -171,8 +175,7 @@ Programming a plugin
 ====================
 
 Programming the binary blob containing the `xtender` into the data partition of the flash device
-using ``xflash``, remembering to allocated some space for the main program if you intend to run from
-flash::
+using ``xflash``, remembering to allocated some space for the host application::
 
     xflash --boot-partition-size=0x20000 --data ./xtender/bin/xtend_blob.bin --target=XK-EVK-XU316
 
@@ -188,12 +191,12 @@ The `xtender` and the program can be flash in one command::
 
     xflash --boot-partition-size=0x20000 --data ./xtender/bin/xtend_blob.bin --target=XK-EVK-XU316 ./bin/app_test.xe
 
-*********************
+**********************
 Printing from a plugin
-*********************
+**********************
 
 Printing from an `xcore` operates when the simulator or debugger detects execution at the address
-of the system call handler (`_DoSyscall`). System calls are also used for other functions such as
+of the system call handler (``_DoSyscall``). System calls are also used for other functions such as
 program exit.
 
 On occasion it may be desirable for a plugin to print to the console. Note, enabling printing in
@@ -249,14 +252,14 @@ Special attention should be paid to the section on
 The application is built using the `xcommon-cmake <https://www.xmos.com/file/xcommon-cmake-documentation/?version=latest>`_
 build system, which is provided with the XTC tools and is based on `CMake <https://cmake.org/>`_.
 
-The ``lib_template`` software ZIP package should be downloaded and extracted to a chosen working
+The ``lib_xtnd`` software ZIP package should be downloaded and extracted to a chosen working
 directory.
 
 To configure the build, the following commands should be run from an XTC command prompt:
 
 .. code-block:: bash
 
-    cd lib_template/examples/app_template
+    cd lib_xtnd/examples/app_simple_port
     cmake -G "Unix Makefiles" -B build
 
 If any dependencies are missing they will be retrieved automatically during this step.
@@ -268,7 +271,7 @@ The application binaries should then be built using ``xmake``:
     xmake -j -C build
 
 Binary artifacts (.xe files) will be generated under the appropriate subdirectories of the
-``app_template/bin`` directory — one for each supported build configuration.
+``app_simple_port/bin`` directory — one for each supported build configuration.
 
 For subsequent builds, the ``cmake`` step may be omitted.
 If ``CMakeLists.txt`` or other build files are modified, ``cmake`` will be re-run automatically
@@ -277,18 +280,15 @@ by ``xmake`` as needed.
 Running the example
 ===================
 
-From an XTC command prompt, the following command should be run from the ``examples/app_template``
-directory:
+From an XTC command prompt, the following command should be run from the ``examples/app_simple_port``
+directory to flash the application and `xtender` to the target device and run it:
 
 .. code-block:: bash
 
-    xrun ./bin/app_template.xe
+    xflash ./bin/app_simple_port.xe --boot-partition-size=0x20000 --data .xtender/bin/xtend_blob.bin --target=XK-EVK-XU316
 
-Alternatively, the application can be programmed into flash memory for standalone execution:
-
-.. code-block:: bash
-
-   xflash ./bin/app_template.xe
+The example host  application calls the `xtender` function ``xtend_port_toggle`` in a loop with a delay.
+The LEDs marked 0, 1, 2, 3 on the `XK-EVK-XU316` board should toggle on and off.
 
 ***************
 Further reading
@@ -300,7 +300,5 @@ Further reading
 API Reference
 *************
 
-Doxygen documentation
-
-
+TODO Doxygen generated API documentation
 

@@ -1,13 +1,13 @@
 # This file relates to internal XMOS infrastructure and should be ignored by external users
 ---
-lib_name: lib_xplug
+lib_name: lib_xtnd
 project: '{{lib_name}}'
-title: '{{lib_name}}: Plugin framework'
-version: 1.0.0
+title: '{{lib_name}}: Plugins for xcore'
+version: 0.1.0
 
 documentation:
   exclude_patterns_path: doc/exclude_patterns.inc
-  root_doc: doc/rst/lib_xplug.rst
+  root_doc: doc/rst/lib_xtnd.rst
   linkcheck_ignore_regex: ['']
   latex_toc_depth: 3
   latex_secnum_depth: 3
@@ -16,7 +16,7 @@ documentation:
     lib_template:
       doxyfile_path: doc/Doxyfile.inc
   pdfs:
-    doc/rst/lib_xplug.rst:
+    doc/rst/lib_xtnd.rst:
       pdf_title: '{{title}}'
       pdf_filename: '{{lib_name}}_v{{version}}'
     README.rst:

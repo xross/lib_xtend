@@ -16,7 +16,7 @@ set(APP_HW_TARGET               XK-EVK-XU316)
 set(APP_COMPILER_FLAGS          -O3 -Wall -lquadflash -mno-dual-issue
                                 -DXTEND_IMAGE_ADDR=${XTEND_IMAGE_ADDR})
 
-set(APP_DEPENDENT_MODULES       "lib_xtend")
+set(APP_DEPENDENT_MODULES       "lib_xtnd")
 
 set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
