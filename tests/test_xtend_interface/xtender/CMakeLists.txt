@@ -4,9 +4,14 @@ project(xtend_interface)
 
 set(APP_HW_TARGET XU316-1024-QF60B-C24)
 
-set(APP_COMPILER_FLAGS  -O3
+set(APP_COMPILER_FLAGS  -O2
+                        -mcmodel=large
                         -mno-dual-issue
                         -nostartfiles
+                        -save-temps
+                        -fasm-linenum
+                        -fcomment-asm
+                        -Wl,--image-base,${XTEND_IMAGE_ADDR}
                     )
 
 # This is a hack to ensure that the xtender_exports.S file is passed to the compiler first.

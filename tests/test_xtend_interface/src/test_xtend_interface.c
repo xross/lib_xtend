@@ -5,16 +5,22 @@
 #include <string.h>
 #include <stdint.h>
 #include <print.h>
-#include "xtend.h"
 
+#include "xtend.h"
 #include "xtend_blob.h"
+
+#ifndef XTEND_IMAGE_ADDR
+#error "XTEND_IMAGE_ADDR must be defined"
+#endif
 
 int main(void)
 {
+    /* Move the blob to a known location in memory */
+    memcpy((void*)XTEND_IMAGE_ADDR, xtend_blob_bin, xtend_blob_bin_len);
 
     xtend_table_t tab;
 
-    xtend_status_t irc = xtend_init(xtend_blob_bin, &tab);
+    xtend_status_t irc = xtend_init((uint8_t *)XTEND_IMAGE_ADDR, &tab);
 
     if (irc != XTEND_OK)
     {
@@ -41,7 +47,9 @@ int main(void)
     int rc_sub   = xtend_call(&tab, (void*)fn_sub, 4, 5);
 
     if((rc_add == 9) && (rc_sub == -1))
+    {
         printstrln("PASS");
+    }
     else
     {
         printintln(rc_add);

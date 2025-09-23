@@ -39,6 +39,7 @@ TODO
 
 * More complex example using I2C, for example
 * Documentation
+* use xmap --first FILE
 * Use a single tile xn when building the xtender
 * Remove debug prints (use lib_logging)
 * Make tests use some shared code...
