@@ -44,20 +44,29 @@ int main(void)
     printf("[app_test] cp=%p dp=%p cp_off=0x%08lX dp_off=0x%08lX\n",
            tab.cp_base,tab.dp_base, tab.hdr->cp_off, tab.hdr->dp_off);
 
-    xtend_fn_t fn_port_toggle = (xtend_fn_t)xtend_find(&tab, "xtend_port_toggle");
+    xtend_fn_t fn_port_toggle_bit = (xtend_fn_t)xtend_find(&tab, "xtend_port_toggle_bit");
 
-    if (!fn_port_toggle)
+    if (!fn_port_toggle_bit)
     {
-        printf("[app_test] Failed to resolve xtend function port_toggle=%p\n", (void*)fn_port_toggle);
+        printf("[app_test] Failed to resolve xtend function port_toggle_bit=%p\n", (void*)fn_port_toggle_bit);
         return 1;
     }
 
+    int ledNum = 0;
     while (1)
     {
-        hwtimer_delay(timer, 10000000);
+        for(int pinVal = 0; pinVal < 2; pinVal++)
+        {
+            hwtimer_delay(timer, 10000000);
 
-        /* Call the xtender function to toggle the port */
-        (void)xtend_call(&tab, (void*)fn_port_toggle, 1, 0);
+            /* Call the xtender function to toggle a bit on the port */
+            (void)xtend_call(&tab, (void*)fn_port_toggle_bit, ledNum, 0);
+        }
+
+        ledNum++;
+        if(ledNum > 3)
+            ledNum = 0;
+
     }
 
     return 0;

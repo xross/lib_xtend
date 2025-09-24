@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
-project(xtender_port)
+project(xtender_interface)
 
 set(APP_HW_TARGET XU316-1024-FB265-C32)
 
@@ -21,5 +21,5 @@ XMOS_REGISTER_APP()
 
 include(${XMOS_SANDBOX_DIR}/lib_xtnd/xtnd_utils.cmake)
 
-build_xtend_blob(${CMAKE_CURRENT_LIST_DIR}/bin/xtender_port.xe)
+build_xtend_blob(${CMAKE_CURRENT_LIST_DIR}/bin/xtender_interface.xe)
 

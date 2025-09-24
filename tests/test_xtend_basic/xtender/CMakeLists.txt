@@ -9,8 +9,7 @@ set(APP_COMPILER_FLAGS  -O0
                         -nostartfiles
                     )
 
-# This is a hack to ensure that the xtender_exports.S file is passed to the compiler first.
-set(APP_XC_SRCS ./src/xtender_exports.S)
+set(APP_ASM_SRCS ./src/xtender_exports.S)
 set(APP_C_SRCS ./src/xtender.c)
 
 set(APP_DEPENDENT_MODULES "")

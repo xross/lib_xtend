@@ -37,9 +37,10 @@ TODO
 ****
 
 * More complex example using I2C, for example
-* Documentation
-* use xmap --first FILE
+* use xmap --first FILE rather than ordering of src files to xcc
+* Documentation improvements
 * Use a single tile xn when building the xtender
+* Split ASSP and author and user documentation
 * Remove debug prints (use lib_logging)
 * Make tests use some shared code...
 * Add hashing for function names
@@ -49,7 +50,7 @@ TODO
 * Allow export table to live anywhere in the binary(?_
 * Blob checking - checksum/signature etc
 * Can we get a free CRC from from an xflash upgrade image?
-  * Use aprogram running in xsim to generate the CRC?
+  * Use a program running in xsim to generate the CRC?
 * Patch plugin for syscalls? (or find another soluton)
 
 Missing Tests
