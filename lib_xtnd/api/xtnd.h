@@ -27,8 +27,9 @@
 #include "quadflash.h"
 
 /* Export table layout :
- *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, length, count,
- *   fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
+ *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, init_len, mem_len,
+ *   count, fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
+ *
  * Offsets are all relative to the start of the table (xtend_header_t base).
  */
 
@@ -43,8 +44,9 @@ typedef struct xtend_header {
     uint32_t ctors_off;
     uint32_t ctors_end_off;
     uint32_t syscall_off;
-    uint32_t length;      /* Total blob length (flash bytes) */
-    uint32_t count;       /* Exported function count */
+    uint32_t init_len;        /* Length of code/data stored in flash */
+    uint32_t mem_len;         /* Complete length of memoery required */
+    uint32_t count;           /* Exported function count */
 } xtend_header_t;
 
 typedef struct xtend_table {
@@ -53,7 +55,7 @@ typedef struct xtend_table {
     const uint32_t *name_offs;
     const char *strings;
     size_t strings_len;
-    const uint8_t *blob_base;
+    uint8_t *blob_base;
     const uint8_t *cp_base;    /* blob_base + hdr->cp_off */
     const uint8_t *dp_base;    /* blob_base + hdr->dp_off */
     const uint8_t *ctors_base; /* blob_base + hdr->ctors_off */
@@ -79,7 +81,7 @@ typedef enum xtend_status {
 int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size);
 
 /* Parse & validate an export table blob. Returns XTEND_OK on success. */
-xtend_status_t xtend_init(const uint8_t *blob, xtend_table_t *t);
+xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t);
 
 /* Locate a function by name. Returns pointer or NULL. */
 void *xtend_find(const xtend_table_t *t, const char *name);

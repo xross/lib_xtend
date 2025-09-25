@@ -49,7 +49,7 @@ xtend_call:
 
     // TODO #define the stack words
     .cc_bottom xtend_call.function
-	.set	xtend_call.nstackwords,2000
+	.set	xtend_call.nstackwords,10000
 	.globl	xtend_call.nstackwords
 	.set	xtend_call.maxcores,1
 	.globl	xtend_call.maxcores

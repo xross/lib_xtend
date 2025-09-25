@@ -15,12 +15,12 @@ xtend_exports:
     .word 1                       /* count */
 
     /* fn_offs[1] */
-    .word xtend_print   - xtend_exports
+    .word xtend_global_add   - xtend_exports
 
     /* name_offs[1] */
-    .word name_xtend_print   - xtend_exports
+    .word name_xtend_global_add   - xtend_exports
 
     /* String pool */
-name_xtend_print:
-    .asciz "xtend_print"
+name_xtend_global_add:
+    .asciz "xtend_global_add"
     .align 4

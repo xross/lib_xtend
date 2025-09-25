@@ -10,7 +10,8 @@ xtend_exports:
     .word _CTOR_LIST_ - xtend_exports
     .word _CTOR_END_ - xtend_exports
     .word _DoSyscall - xtend_exports
-    .word _fdp.bss - xtend_exports /* length */
+    .word _fdp.bss - xtend_exports /* init_len */
+     .word (_edp.bss.large - xtend_exports)      /* mem_len (falls back if same) */
     .word 2                       /* count */
 
     /* fn_offs[2] */
