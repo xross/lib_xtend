@@ -21,6 +21,6 @@ set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
 XMOS_REGISTER_APP()
 
-xtend_add_test_plugin_blob(test_xtend_xc_timer_t0 xtend_xc_timer)
-xtend_add_test_plugin_blob(test_xtend_xc_timer_t1 xtend_xc_timer)
+add_dependencies(test_xtend_xc_timer_t0 blob_xtend_xc_timer)
+add_dependencies(test_xtend_xc_timer_t1 blob_xtend_xc_timer)
 

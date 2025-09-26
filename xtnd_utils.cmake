@@ -12,6 +12,7 @@ function(build_xtend_blob xe_path)
     #   [HEADER_FILENAME name]           Header filename (default: xtend_blob.h)
     #   [HEADER_OUTPUT_DIR dir]          Directory for header (default: EXPORT_DIR if exporting else current binary dir)
     #   [ARRAY_SYMBOL name]              Symbol for data array (default: xtend_blob_bin)
+    #   [EXPORT_XB]                       Also copy stripped <base>.xb beside the .xe (default OFF)
     # Behaviour:
     #   - Always creates an internal blob in <binary dir>/xtend_blob_<base>/<BLOB_FILENAME>
     #   - Unless NO_EXPORT, also copies that blob to EXPORT_DIR as the flashable artifact.
@@ -22,7 +23,7 @@ function(build_xtend_blob xe_path)
     #   XTEND_BLOB_HEADER_FILE   -> header path (if generated)
     #   XTEND_BLOB_ARRAY_SYMBOL  -> array symbol (if header generated)
 
-    set(options GENERATE_HEADER NO_EXPORT)
+    set(options GENERATE_HEADER NO_EXPORT EXPORT_XB)
     set(oneValueArgs TARGET BLOB_FILENAME HEADER_FILENAME HEADER_OUTPUT_DIR ARRAY_SYMBOL EXPORT_DIR)
     cmake_parse_arguments(BXB "${options}" "${oneValueArgs}" "" ${ARGN})
 
@@ -63,6 +64,8 @@ function(build_xtend_blob xe_path)
         set(_blob_filename "xtend_blob.bin")
     endif()
 
+    # Optional export of stripped xb beside .xe (default OFF). Enable with EXPORT_XB.
+
     set(_work_dir "${CMAKE_CURRENT_BINARY_DIR}/xtend_blob_${_base}")
     file(MAKE_DIRECTORY "${_work_dir}")
 
@@ -84,17 +87,20 @@ function(build_xtend_blob xe_path)
             get_filename_component(_xe_dir "${_xe_src}" DIRECTORY)
             set(_export_dir "${_xe_dir}")
         elseif(BXB_TARGET AND TARGET "${BXB_TARGET}")
-            get_target_property(_t_bindir "${BXB_TARGET}" BINARY_DIR)
-            if(NOT _t_bindir)
-                set(_t_bindir "${CMAKE_CURRENT_BINARY_DIR}")
-            endif()
-            set(_export_dir "${_t_bindir}")
+            # Use the actual runtime output directory of the target (.xe location) via generator expression
+            set(_export_dir "$<TARGET_FILE_DIR:${BXB_TARGET}>")
         else()
             # Fallback
             set(_export_dir "${CMAKE_CURRENT_BINARY_DIR}")
         endif()
-        file(MAKE_DIRECTORY "${_export_dir}")
+        # Only attempt to create if this is a literal path (not a generator expression)
+        if(NOT _export_dir MATCHES "^\\$<")
+            file(MAKE_DIRECTORY "${_export_dir}")
+        endif()
         set(_exported_blob "${_export_dir}/${_blob_filename}")
+        if(BXB_EXPORT_XB)
+            set(_exported_xb   "${_export_dir}/${_base}.xb")
+        endif()
     endif()
 
     # Header handling
@@ -135,9 +141,15 @@ function(build_xtend_blob xe_path)
     if(_do_header)
         list(APPEND _outputs "${_header_path}")
     endif()
+    # BYPRODUCTS: only include literal paths (avoid generator expressions like $<TARGET_FILE_DIR:...>)
+    set(_byproducts)
     if(_do_export)
-        # Ensure exported blob is tracked as byproduct (it is not the primary output if distinct path)
-        set(_byproducts "${_exported_blob}")
+        if(_exported_blob AND NOT _exported_blob MATCHES "^\\$<")
+            list(APPEND _byproducts "${_exported_blob}")
+        endif()
+        if(_exported_xb AND NOT _exported_xb MATCHES "^\\$<")
+            list(APPEND _byproducts "${_exported_xb}")
+        endif()
     endif()
     list(APPEND _byproducts "${_xb}" "${_raw_image}")
 
@@ -163,6 +175,12 @@ function(build_xtend_blob xe_path)
             COMMAND ${CMAKE_COMMAND} -E echo "[xtend] Export internal blob -> ${_exported_blob}"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_internal_blob}" "${_exported_blob}"
         )
+        if(_exported_xb)
+            list(APPEND _cmds
+                COMMAND ${CMAKE_COMMAND} -E echo "[xtend] Export stripped xb -> ${_exported_xb}"
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_xb}" "${_exported_xb}"
+            )
+        endif()
     endif()
     if(_do_header)
         # Use exported blob when available, else internal
@@ -192,13 +210,21 @@ function(build_xtend_blob xe_path)
     # Determine public blob file reference
     if(_do_export)
         set(_public_blob "${_exported_blob}")
+        if(_exported_xb)
+            set(_public_xb   "${_exported_xb}")
+        else()
+            # Fall back to internal stripped xb path (not exported) for reference
+            set(_public_xb   "${_xb}")
+        endif()
     else()
         set(_public_blob "${_internal_blob}")
+        set(_public_xb   "${_xb}")
     endif()
 
     # Export variables to caller
     set(XTEND_BLOB_INTERNAL_FILE "${_internal_blob}" PARENT_SCOPE)
     set(XTEND_BLOB_FILE          "${_public_blob}"  PARENT_SCOPE)
+    set(XTEND_XB_FILE            "${_public_xb}"    PARENT_SCOPE)
     if(_do_header)
         set(XTEND_BLOB_HEADER_FILE "${_header_path}" PARENT_SCOPE)
         set(XTEND_BLOB_ARRAY_SYMBOL "${_array_symbol}" PARENT_SCOPE)
@@ -214,6 +240,7 @@ function(build_xtend_blob xe_path)
     if(_blob_owner)
         set_property(TARGET "${_blob_owner}" PROPERTY XTEND_BLOB_FILE "${_public_blob}")
         set_property(TARGET "${_blob_owner}" PROPERTY XTEND_BLOB_INTERNAL_FILE "${_internal_blob}")
+        set_property(TARGET "${_blob_owner}" PROPERTY XTEND_XB_FILE "${_public_xb}")
         if(_do_header)
             set_property(TARGET "${_blob_owner}" PROPERTY XTEND_BLOB_HEADER_FILE "${_header_path}")
             set_property(TARGET "${_blob_owner}" PROPERTY XTEND_BLOB_ARRAY_SYMBOL "${_array_symbol}")

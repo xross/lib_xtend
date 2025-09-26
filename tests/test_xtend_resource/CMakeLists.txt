@@ -17,4 +17,4 @@ set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
 XMOS_REGISTER_APP()
 
-xtend_add_test_plugin_blob(test_xtend_resource xtender_resource)
+add_dependencies(test_xtend_resource blob_xtender_resource)

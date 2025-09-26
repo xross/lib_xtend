@@ -22,4 +22,4 @@ set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
 XMOS_REGISTER_APP()
 
-xtend_add_test_plugin_blob(test_xtend_interface_multiclient xtend_interface_multiclient)
+add_dependencies(test_xtend_interface_multiclient blob_xtend_interface_multiclient)

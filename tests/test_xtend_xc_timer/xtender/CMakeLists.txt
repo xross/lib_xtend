@@ -20,3 +20,5 @@ include(${XMOS_SANDBOX_DIR}/lib_xtnd/xtnd_utils.cmake)
 
 XTND_REGISTER_APP()
 
+build_xtend_blob("$<TARGET_FILE:xtend_xc_timer>" TARGET xtend_xc_timer GENERATE_HEADER HEADER_OUTPUT_DIR "${CMAKE_CURRENT_LIST_DIR}/../src" HEADER_FILENAME xtend_blob.h ARRAY_SYMBOL xtend_blob_bin)
+
