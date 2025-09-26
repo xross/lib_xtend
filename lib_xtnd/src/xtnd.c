@@ -37,6 +37,13 @@ static int xtend_run_ctors(const xtend_table_t *t)
     return ran;
 }
 
+xtend_status_t xtend_free(xtend_table_t *t)
+{
+    /* Free allocated lock */
+
+    return XTEND_OK;
+}
+
 xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t)
 {
     if (!blob || !t)

@@ -5,16 +5,22 @@ add_subdirectory(xtender)
 
 project(test_xtend_xc_timer)
 
+
 set(APP_INCLUDES src)
 
 set(APP_HW_TARGET               XK-EVK-XU316)
 
-set(APP_COMPILER_FLAGS          -O3 -Wall -lquadflash)
+set(COMPILER_FLAGS_COMMON       -O3 -Wall -lquadflash)
 
+set(APP_COMPILER_FLAGS_t0          ${COMPILER_FLAGS_COMMON} -DTHREAD_NUM=0)
+
+set(APP_COMPILER_FLAGS_t1          ${COMPILER_FLAGS_COMMON} -DTHREAD_NUM=1)
 set(APP_DEPENDENT_MODULES       "lib_xtnd")
 
 set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
 XMOS_REGISTER_APP()
 
-xtend_add_test_plugin_blob(test_xtend_xc_timer xtend_xc_timer)
+xtend_add_test_plugin_blob(test_xtend_xc_timer_t0 xtend_xc_timer)
+xtend_add_test_plugin_blob(test_xtend_xc_timer_t1 xtend_xc_timer)
+

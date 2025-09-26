@@ -9,7 +9,7 @@
 
 #include "xtend_blob.h"
 
-int main(void)
+int test_xtend_xc_timer(void)
 {
     xtend_table_t tab;
 

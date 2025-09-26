@@ -21,5 +21,5 @@ include(${XMOS_SANDBOX_DIR}/lib_xtnd/xtnd_utils.cmake)
 
 XTND_REGISTER_APP()
 
-build_xtend_blob(${CMAKE_CURRENT_LIST_DIR}/bin/xtender_port.xe)
+build_xtend_blob($<TARGET_FILE:xtender_port> TARGET xtender_port)
 

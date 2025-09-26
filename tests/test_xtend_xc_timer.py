@@ -6,9 +6,16 @@ import Pyxsim
 from Pyxsim import testers
 from pathlib import Path
 
-def test_xtend_xc_timer(level, capfd, verbosity):
+# t1 variant currently expected to fail (marked xfail until fixed)
+VARIANTS = [
+    pytest.param("t0", id="t0"),
+    pytest.param("t1", id="t1", marks=pytest.mark.xfail(reason="Known issue: t1 variant currently failing")),
+]
 
-    binary = Path(__file__).parent / "test_xtend_xc_timer" / "bin" / "test_xtend_xc_timer.xe"
+@pytest.mark.parametrize("variant", VARIANTS)
+def test_xtend_xc_timer(level, capfd, verbosity, variant):
+    variant_binary = f"test_xtend_xc_timer_{variant}.xe"
+    binary = Path(__file__).parent / "test_xtend_xc_timer" / "bin" / variant /variant_binary
 
     expect_file = Path(__file__).parent / "test_xtend_xc_timer" / "pass.expect"
 
@@ -27,6 +34,7 @@ def test_xtend_xc_timer(level, capfd, verbosity):
         simargs=simargs,
         tester=tester,
         capfd=capfd,
-        clean_before_build=False)
+        clean_before_build=False,
+    )
 
     assert result
