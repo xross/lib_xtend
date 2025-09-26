@@ -6,7 +6,7 @@ import Pyxsim
 from Pyxsim import testers
 from pathlib import Path
 
-def test_xtend_basic(level, capfd, verbosity):
+def test_xtend_xc_timer(level, capfd, verbosity):
 
     binary = Path(__file__).parent / "test_xtend_xc_timer" / "bin" / "test_xtend_xc_timer.xe"
 

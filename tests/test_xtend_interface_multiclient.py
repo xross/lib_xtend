@@ -6,11 +6,11 @@ import Pyxsim
 from Pyxsim import testers
 from pathlib import Path
 
-def test_xtend_interface(level, capfd, verbosity):
+def test_xtend_interface_multiclient(level, capfd, verbosity):
 
-    binary = Path(__file__).parent / "test_xtend_interface" / "bin" / "test_xtend_interface.xe"
+    binary = Path(__file__).parent / "test_xtend_interface_multiclient" / "bin" / "test_xtend_interface_multiclient.xe"
 
-    expect_file = Path(__file__).parent / "test_xtend_interface" / "pass.expect"
+    expect_file = Path(__file__).parent / "test_xtend_interface_multiclient" / "pass.expect"
 
     tester = testers.ComparisonTester(open(expect_file), regexp=True, verbosity=verbosity)
 

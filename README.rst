@@ -37,9 +37,8 @@ TODO
 ****
 
 * Thread local timers work because timer for thread 0 is always set as 1 in the timers table
-   - this means it will be shared between the host and plugin - coud be a problem
+   - this means it will be shared between the host and plugin - could be a problem
 * Use a single tile xn when building the xtender
-* Remove warning: xmap: Warning: Image base on command line overrides config file for tile 0, node 0.
 * use xmap --first FILE rather than ordering of src files to xcc
 * Split ASSP and author and user documentation
 * Check for fn count > number of functions in blob
@@ -56,6 +55,9 @@ TODO
 * Can we get a free CRC from from an xflash upgrade image?
   * Use a program running in xsim to generate the CRC?
 * Patch plugin for syscalls? (or find another soluton)
+* Remove warning: xmap: Warning: Image base on command line overrides config file for tile 0, node 0.
+    - This is because xmap makes a internal config, there is an option (-c, undocumented) to pass a config file we could use
+
 
 Missing Tests
 =============

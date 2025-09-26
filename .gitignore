@@ -8,6 +8,15 @@ devl-*
 spispec-*
 *.ppb
 
+tests/test_xplug_basic/src/xtend_blob.h
+tests/test_xplug_global/src/xtend_blob.h
+tests/test_xplug_resource/src/xtend_blob.h
+tests/test_xtend_interface/src/xtend_blob.h
+tests/test_xtend_interface_multiclient/src/xtend_blob.h
+tests/test_xtend_global_bss/src/xtend_blob.h
+tests/test_xtend_xc_timer/src/xtend_blob.h
+tests/test_xplug_print/src/xtend_blob.h
+
 # Tmp files & logs
 *.settings
 *.bin
@@ -53,9 +62,4 @@ spispec-*
 # Built documentation
 doc/_build/pdf/*.pdf
 **/doc/pdf/*.pdf
-tests/test_xplug_basic/src/xplugin_blob.h
-tests/test_xplug_global/src/xplugin_blob.h
-tests/test_xplug_resource/src/xplugin_blob.h
-tests/test_xplug_print/src/xplugin_blob.h
-tests/test_xtend_interface/src/xtend_blob.h
-tests/test_xtend_global_bss/src/xtend_blob.h
+
