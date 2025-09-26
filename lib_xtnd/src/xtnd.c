@@ -1,5 +1,11 @@
 #include "xtnd.h"
 
+#if defined(XTEND_IMAGE_ADDR)
+#define BASE_ADDR XTEND_IMAGE_ADDR
+#else
+#define BASE_ADDR XS1_RAM_BASE
+#endif
+
 /* Runs contructors from ctors table
  * Returns number run, or -1 on error
  */
@@ -13,10 +19,14 @@ static int xtend_run_ctors(const xtend_table_t *t)
     int ran = 0;
     for (uint32_t i = 0; i < t->ctors_count; ++i)
     {
-        uint32_t off = ((const uint32_t*)t->ctors_base)[i] - XS1_RAM_BASE;
+        uint32_t off = ((const uint32_t*)t->ctors_base)[i] - BASE_ADDR;
 
         /* Check constuctor table offset is valid (word aligned and within the blob) */
-        if ((off & 3u) || off >= t->hdr->init_len)
+        if (off & 3u)
+        {
+            return -1;
+        }
+        if (off >= t->hdr->init_len)
         {
             return -1;
         }
@@ -44,6 +54,7 @@ xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t)
         return XTEND_ERR_VERSION;
 
     uint32_t count = h->count;
+
     if (count > (h->init_len - sizeof(*h)) / (sizeof(uint32_t) * 2u))
         return XTEND_ERR_COUNT;
 
@@ -87,23 +98,34 @@ xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t)
 void *xtend_find(const xtend_table_t *t, const char *name)
 {
     if (!t || !name)
+    {
         return NULL;
+    }
 
     uint32_t count = t->hdr->count;
     for (uint32_t i = 0; i < count; ++i)
     {
         uint32_t fn_off = t->fn_offs[i];
         uint32_t nm_off = t->name_offs[i];
+
+
         if ((fn_off & 3u) || fn_off >= t->hdr->init_len|| nm_off >= t->hdr->init_len)
+        {
             continue;
+        }
 
         const char *nm = (const char *)t->blob_base + nm_off;
         size_t remain = t->hdr->init_len - nm_off;
         size_t slen = strnlen(nm, remain);
         if (slen == remain)
+        {
             continue;
+        }
+
         if (strcmp(nm, name) == 0)
+        {
             return (void *)(t->blob_base + fn_off);
+        }
     }
     return NULL;
 }
