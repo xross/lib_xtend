@@ -164,8 +164,14 @@ int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size
         return 1;
     }
 
+    if(h->init_len > blob_space_size)
+    {
+        printf("[xtend] ERROR: MAX_XTEND_BLOB_SIZE %d is smaller than blob size %lu bytes\n",
+               blob_space_size, h->init_len);
+        return 1;
+    }
+
     /* Read the whole blob */
-    /* TODO check we have enough space for the blob */
     fail = fl_readData(0, h->init_len, blob_space);
 
     if (fail)
