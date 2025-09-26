@@ -40,4 +40,5 @@ add_subdirectory(test_xtend_global_bss)
 add_subdirectory(test_xtend_resource)
 add_subdirectory(test_xtend_print)
 add_subdirectory(test_xtend_interface)
+add_subdirectory(test_xtend_xc_timer)
 
