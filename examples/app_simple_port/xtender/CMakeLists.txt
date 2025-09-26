@@ -17,9 +17,9 @@ set(APP_DEPENDENT_MODULES "")
 
 set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../..)
 
-XMOS_REGISTER_APP()
-
 include(${XMOS_SANDBOX_DIR}/lib_xtnd/xtnd_utils.cmake)
+
+XTND_REGISTER_APP()
 
 build_xtend_blob(${CMAKE_CURRENT_LIST_DIR}/bin/xtender_port.xe)
 

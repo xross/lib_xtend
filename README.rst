@@ -36,18 +36,21 @@ Features
 TODO
 ****
 
-* More complex example using I2C, for example
-* use xmap --first FILE rather than ordering of src files to xcc
-* Documentation improvements
+* Thread local timers work because timer for thread 0 is always set as 1 in the timers table
+   - this means it will be shared between the host and plugin - coud be a problem
 * Use a single tile xn when building the xtender
+* use xmap --first FILE rather than ordering of src files to xcc
 * Split ASSP and author and user documentation
+* Check for fn count > number of functions in blob
+* Documentation improvements
 * Remove debug prints (use lib_logging)
 * Make tests use some shared code...
 * Add hashing for function names
+* Support sharing a lock between host and plugin?
 * Run destructors
 * Automate function count in user code(?)
 * Security features
-* Allow export table to live anywhere in the binary(?_
+* Allow export table to live anywhere in the binary(?
 * Blob checking - checksum/signature etc
 * Can we get a free CRC from from an xflash upgrade image?
   * Use a program running in xsim to generate the CRC?
@@ -56,6 +59,7 @@ TODO
 Missing Tests
 =============
 
+* xc lock allocated
 * Bad magic number
 * Bad version number
 * Missing function

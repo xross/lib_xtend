@@ -1,3 +1,5 @@
+
+
 function(build_xtend_blob xe_path)
     # Args:
     #   xe_path              Absolute or relative path to the .xe file (expected final location)
@@ -77,4 +79,50 @@ function(build_xtend_blob xe_path)
     set(XTEND_BLOB_INTERNAL "${_internal_blob}" PARENT_SCOPE)
     set(XTEND_BLOB          "${_external_blob}" PARENT_SCOPE)
 endfunction()
+
+# Capture (absolute) location of utils once
+if(NOT DEFINED XTND_UTILS_DIR)
+    get_filename_component(XTND_UTILS_DIR "${CMAKE_CURRENT_LIST_DIR}" REALPATH)
+endif()
+
+# Default toggle (respect -D overrides)
+if(NOT DEFINED XTEND_ENABLE_LIBC_LOCK_INIT)
+    set(XTEND_ENABLE_LIBC_LOCK_INIT ON CACHE BOOL
+        "Auto-init libc hardware lock in all xtend plugins")
+endif()
+
+function(xtnd_inject_common_runtime)
+    if(NOT XTEND_ENABLE_LIBC_LOCK_INIT)
+        return()
+    endif()
+
+    if(NOT DEFINED APP_C_SRCS)
+        set(APP_C_SRCS "")
+    endif()
+
+    # Absolute path to the runtime source
+    set(_runtime_abs "${XTND_UTILS_DIR}/runtime/xtnd_lock_init.c")
+    if(NOT EXISTS "${_runtime_abs}")
+        message(FATAL_ERROR "xtnd_inject_common_runtime: missing ${_runtime_abs}")
+    endif()
+
+    # Compute a path RELATIVE to the plugin CMakeLists directory
+    file(RELATIVE_PATH _runtime_rel "${CMAKE_CURRENT_LIST_DIR}" "${_runtime_abs}")
+
+    # Force using the relative path (avoid absolute to stop xcommon re-prefixing)
+    if(_runtime_rel STREQUAL "" OR _runtime_rel MATCHES "^/")
+        message(FATAL_ERROR "Unexpected relative path result: '${_runtime_rel}'")
+    endif()
+
+    list(FIND APP_C_SRCS "${_runtime_rel}" _have)
+    if(_have EQUAL -1)
+        list(APPEND APP_C_SRCS "${_runtime_rel}")
+        set(APP_C_SRCS "${APP_C_SRCS}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+macro(XTND_REGISTER_APP)
+    xtnd_inject_common_runtime()
+    XMOS_REGISTER_APP()
+endmacro()
 
