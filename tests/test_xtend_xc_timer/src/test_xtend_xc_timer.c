@@ -29,10 +29,13 @@ int test_xtend_xc_timer(void)
         return 1;
     }
 
-    int delay = 100;
-    int rc_delay = xtend_call(&tab, (void*)fn_delay, delay, 0);
+    int delayA = 100;
+    int delayB = 200;
+    int rc_delay = xtend_call(&tab, (void*)fn_delay, delayA, delayB);
 
-    if(rc_delay == (delay))
+    if((delayA > delayB) && (rc_delay == delayB))
+        printstrln("PASS");
+    if((delayB > delayA) && (rc_delay == delayA))
         printstrln("PASS");
     else
         printintln(rc_delay);

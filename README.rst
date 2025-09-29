@@ -36,15 +36,16 @@ Features
 TODO
 ****
 
-* Use of thread local timer for thread number > 0 (add test)
 * Thread local timers work because timer for thread 0 is always set as 1 in the timers table
    - This means it will be shared between the host and plugin - could be a problem
    - Consider problem case and add test
+* What is a plugin spawns a thread and uses a timer?
 * Add a free function to unload the xtender
 * Use a single tile xn when building the xtender
 * use xmap --first FILE rather than ordering of src files to xcc
 * Split ASSP and author and user documentation
 * Check for fn count > number of functions in blob
+* Deal with current fixed int f(int, int) signature
 * Documentation improvements
 * Remove debug prints (use lib_logging)
 * Make tests use some shared code...
@@ -52,8 +53,7 @@ TODO
 * Support sharing a lock between host and plugin?
 * Run destructors
 * Automate function count in user code(?)
-* Security features
-* Allow export table to live anywhere in the binary(?
+* Allow export table to live anywhere in the binary(?)
 * Blob checking - checksum/signature etc
 * Can we get a free CRC from from an xflash upgrade image?
   * Use a program running in xsim to generate the CRC?

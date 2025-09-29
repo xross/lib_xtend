@@ -11,13 +11,18 @@
 #define XTEND_EXPORT_MAGIC          (0x58544E44u) /* "XTND" */
 #define XTEND_EXPORT_VERSION        (1)
 
+#ifndef XTND_CALL_STACK_WORDS
+#define XTND_CALL_STACK_WORDS       (10000)
+#endif
+
+#include <xs1.h>
+
 #ifndef __ASSEMBLER__
 
 #ifdef __xtend_conf_h_exists__
 #include "xtend_conf.h"
 #endif
 
-#include <xs1.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -26,6 +31,7 @@
 
 #include "quadflash.h"
 
+
 /* Export table layout :
  *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, init_len, mem_len,
  *   count, fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
@@ -33,7 +39,6 @@
  * Offsets are all relative to the start of the table (xtend_header_t base).
  */
 
-/* TODO extend to support non-fixed arg counts */
 typedef int (*xtend_fn_t)(unsigned, unsigned);
 
 typedef struct xtend_header {

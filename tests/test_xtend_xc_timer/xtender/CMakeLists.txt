@@ -4,7 +4,7 @@ project(xtend_xc_timer)
 
 set(APP_HW_TARGET XU316-1024-QF60B-C24)
 
-set(APP_COMPILER_FLAGS  -O0
+set(APP_COMPILER_FLAGS  -O3
                         -mno-dual-issue
                         -nostartfiles
                     )
