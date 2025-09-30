@@ -5,6 +5,7 @@ project(xtend_tests)
 include(${CMAKE_CURRENT_LIST_DIR}/../xtnd_utils.cmake)
 
 add_subdirectory(test_xtend_basic)
+add_subdirectory(test_xtend_basic_xc)
 add_subdirectory(test_xtend_global)
 add_subdirectory(test_xtend_global_bss)
 add_subdirectory(test_xtend_resource)

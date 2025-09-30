@@ -60,6 +60,7 @@ TODO
 * Patch plugin for syscalls? (or find another soluton)
 * Remove warning: xmap: Warning: Image base on command line overrides config file for tile 0, node 0.
     - This is because xmap makes a internal config, there is an option (-c, undocumented) to pass a config file we could use
+* Add thread hobbling to documentation
 
 
 Missing Tests

@@ -4,6 +4,12 @@
 #ifndef _XTEND_H_
 #define _XTEND_H_
 
+#ifdef __xtnd_conf_h_exists__
+#include "xtnd_conf.h"
+#endif
+
+#include <xs1.h>
+
 /* Offsets (in words) within xtend_table_t (used in assembly) */
 #define XTEND_OFF_CP_BASE_WORDS     (6)
 #define XTEND_OFF_DP_BASE_WORDS     (7)
@@ -15,13 +21,12 @@
 #define XTND_CALL_STACK_WORDS       (10000)
 #endif
 
-#include <xs1.h>
-
-#ifndef __ASSEMBLER__
-
-#ifdef __xtend_conf_h_exists__
-#include "xtend_conf.h"
+#ifdef __XC__
+#define UNSAFE unsafe
+#else
+#define UNSAFE
 #endif
+#if !defined(__ASSEMBLER__)
 
 #include <stdio.h>
 #include <stdint.h>
@@ -30,16 +35,6 @@
 #include <string.h>
 
 #include "quadflash.h"
-
-
-/* Export table layout :
- *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, init_len, mem_len,
- *   count, fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
- *
- * Offsets are all relative to the start of the table (xtend_header_t base).
- */
-
-typedef int (*xtend_fn_t)(unsigned, unsigned);
 
 typedef struct xtend_header {
     uint32_t magic;
@@ -55,17 +50,31 @@ typedef struct xtend_header {
 } xtend_header_t;
 
 typedef struct xtend_table {
-    const xtend_header_t *hdr;
-    const uint32_t *fn_offs;
-    const uint32_t *name_offs;
-    const char *strings;
+    const xtend_header_t * UNSAFE hdr;
+    const uint32_t * UNSAFE fn_offs;
+    const uint32_t * UNSAFE name_offs;
+    const char * UNSAFE strings;
     size_t strings_len;
-    uint8_t *blob_base;
-    const uint8_t *cp_base;    /* blob_base + hdr->cp_off */
-    const uint8_t *dp_base;    /* blob_base + hdr->dp_off */
-    const uint8_t *ctors_base; /* blob_base + hdr->ctors_off */
+    uint8_t * UNSAFE blob_base;
+    const uint8_t * UNSAFE cp_base;    /* blob_base + hdr->cp_off */
+    const uint8_t * UNSAFE dp_base;    /* blob_base + hdr->dp_off */
+    const uint8_t * UNSAFE ctors_base; /* blob_base + hdr->ctors_off */
     uint32_t ctors_count;
 } xtend_table_t;
+
+/* Call a plugin function */
+int xtend_call(const xtend_table_t * UNSAFE t, void * UNSAFE fn, unsigned a0, unsigned a1);
+
+#if !defined(__XC__)
+
+/* Export table layout :
+ *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, init_len, mem_len,
+ *   count, fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
+ *
+ * Offsets are all relative to the start of the table (xtend_header_t base).
+ */
+
+typedef int (*xtend_fn_t)(unsigned, unsigned);
 
 /* Status codes for xtend_init parsing */
 typedef enum xtend_status {
@@ -91,11 +100,9 @@ xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t);
 /* Locate a function by name. Returns pointer or NULL. */
 void *xtend_find(const xtend_table_t *t, const char *name);
 
-/* Call a plugin function */
-int xtend_call(const xtend_table_t *t, void *fn, unsigned a0, unsigned a1);
-
 _Static_assert(XTEND_OFF_CP_BASE_WORDS * sizeof(uint32_t) == offsetof(struct xtend_table, cp_base), "offset changed: cp_base");
 _Static_assert(XTEND_OFF_DP_BASE_WORDS * sizeof(uint32_t) == offsetof(struct xtend_table, dp_base), "offset changed: dp_base");
 
+#endif
 #endif
 #endif // _XTEND_H_
