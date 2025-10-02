@@ -11,13 +11,14 @@
 #include "xtnd.h"
 
 #include "xtend_blob.h"
+#include "xtnd_test_config.h"
 
 int xc_call(xtend_table_t *tab, xtend_fn_t fn_delay, int a, int b);
 
 int main(void)
 {
     xtend_table_t tab;
-    int memSize = xtend_blob_bin_len + 128;
+    int memSize = XTND_TEST_BLOB_ALLOC_SIZE;
     uint8_t *blob = malloc(memSize);
 
     memcpy(blob, xtend_blob_bin, xtend_blob_bin_len);

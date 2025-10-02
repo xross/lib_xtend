@@ -1,8 +1,5 @@
 // Copyright 2025 XMOS LIMITED.
 // This Software is subject to the terms of the XMOS Public Licence: Version 1.
-
-/* Test that host timer functionality is not polluted by xtender */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,14 +8,18 @@
 #include "xtnd.h"
 
 #include "xtend_blob.h"
-
-int xc_call(xtend_table_t *tab, xtend_fn_t fn_delay);
+#include "xtnd_test_config.h"
 
 int main(void)
 {
     xtend_table_t tab;
 
-    xtend_status_t irc = xtend_init(xtend_blob_bin, xtend_blob_bin_size, &tab);
+    int memSize = XTND_TEST_BLOB_ALLOC_SIZE;
+    uint8_t *blob = malloc(memSize);
+
+    memcpy(blob, xtend_blob_bin, xtend_blob_bin_len);
+
+    xtend_status_t irc = xtend_init(blob, memSize, &tab);
 
     if (irc != XTEND_OK)
     {
@@ -34,13 +35,15 @@ int main(void)
         return 1;
     }
 
-    int fail = xc_call(&tab, fn_delay);
+    int delayA = 100;
+    int delayB = 200;
+    int rc_delay = xtend_call(&tab, (void*)fn_delay, delayA, delayB);
 
-    if(!fail)
-    {
+    if((delayA > delayB) && (rc_delay == delayB))
         printstrln("PASS");
-        return 0;
-    }
-
-    return 1;
+    if((delayB > delayA) && (rc_delay == delayA))
+        printstrln("PASS");
+    else
+        printintln(rc_delay);
+    return 0;
 }

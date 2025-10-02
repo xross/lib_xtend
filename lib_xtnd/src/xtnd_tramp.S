@@ -42,6 +42,7 @@ xtend_call.timer_ok:
     mov         r0, r2
     mov         r1, r3
 
+xtend_call.jump:
     bla         r11                   // Call fn
 
     // Anything with more than 4(?) returns wont work (unlikely..)
@@ -53,6 +54,7 @@ xtend_call.timer_ok:
     ldw         r11, sp[2]
     set         dp, r11
 
+xtend_call.return:
     ldw         r10, sp[3]
     ldw         r9, sp[4]
     retsp       8

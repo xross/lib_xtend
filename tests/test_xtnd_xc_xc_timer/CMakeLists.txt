@@ -5,7 +5,7 @@ add_subdirectory(xtender)
 
 project(test_xtnd_xc_xc_timer)
 
-set(APP_INCLUDES src)
+set(APP_INCLUDES src ../)
 
 set(APP_HW_TARGET               XK-EVK-XU316)
 

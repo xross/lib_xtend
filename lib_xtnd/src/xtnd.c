@@ -89,12 +89,11 @@ xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
 
     if(maxSize < h->mem_len)
     {
-        /* TODO check there is enough space for the bss/bss.large */
         printf("[xtend] mem available: %d bytes. Required: %d bytes\n", (int)maxSize, (int)h->mem_len);
         return XTEND_ERR_SIZE;
     }
 
-    /*zero the bss section */
+    /* Zero the bss section */
     for (int i = 0; i < (int)(h->mem_len - h->init_len); i++)
     {
         t->blob_base[h->init_len + i] = 0;

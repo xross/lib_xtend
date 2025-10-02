@@ -9,7 +9,7 @@ add_subdirectory(xtender)
 
 project(test_xtnd_c_xc_interface)
 
-set(APP_INCLUDES src)
+set(APP_INCLUDES src ../)
 
 set(APP_HW_TARGET               XK-EVK-XU316)
 

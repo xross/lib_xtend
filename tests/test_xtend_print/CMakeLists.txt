@@ -5,7 +5,7 @@ add_subdirectory(xtender)
 
 project(test_xtend_print)
 
-set(APP_INCLUDES src)
+set(APP_INCLUDES src ../)
 
 set(APP_HW_TARGET               XK-EVK-XU316)
 

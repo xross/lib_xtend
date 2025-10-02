@@ -8,12 +8,13 @@
 #include "xtnd.h"
 
 #include "xtend_blob.h"
+#include "xtnd_test_config.h"
 
 int test_xtnd_mt_c_xc_timer(void)
 {
     xtend_table_t tab;
 
-    int memSize = xtend_blob_bin_len + 128;
+    int memSize = XTND_TEST_BLOB_ALLOC_SIZE;
     uint8_t *blob = malloc(memSize);
 
     memcpy(blob, xtend_blob_bin, xtend_blob_bin_len);

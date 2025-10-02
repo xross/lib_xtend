@@ -36,18 +36,14 @@ Features
 TODO
 ****
 
-* Make tests use some shared code...
-    * C/XC
-    * python
-*h  Add test for timer pollution
+* Fix test fail test_xtnd_suite[test_xtnd_mt_c_xc_timer[t1]]
+* In tests use a shared set of xtenders rather than building them into each test app
 * Read mem_len before mallocing space for blob
-
-* Thread local timers work because timer for thread 0 is always set as 1 in the timers table
-   - This means it will be shared between the host and plugin - could be a problem
-   - Consider problem case and add test
 * What is a plugin spawns a thread and uses a timer?
+* There is potential issue with pollution of timers between host and plugins when using xc pool
+  timers, however, it's been hard to make a test case for this as the xc compiler seems to fully
+  setup a timer event properly when used or simply uses the gettime instuction.
 * Add a free function to unload the xtender
-* Move test xtenders outside of the test apps such that multiple test apps can use the same xtnder
 * Use a single tile xn when building the xtender
 * use xmap --first FILE rather than ordering of src files to xcc
 * Split ASSP and author and user documentation
@@ -56,7 +52,6 @@ TODO
 * Documentation improvements
 * Remove debug prints (use lib_logging)
 * Add hashing for function names
-* Support sharing a lock between host and plugin?
 * Run destructors
 * Automate function count in user code(?)
 * Allow export table to live anywhere in the binary(?)
@@ -64,10 +59,7 @@ TODO
 * Can we get a free CRC from from an xflash upgrade image?
   * Use a program running in xsim to generate the CRC?
 * Patch plugin for syscalls? (or find another soluton)
-* Remove warning: xmap: Warning: Image base on command line overrides config file for tile 0, node 0.
-    - This is because xmap makes a internal config, there is an option (-c, undocumented) to pass a config file we could use
 * Add thread hobbling to documentation
-
 
 Missing Tests
 =============
@@ -97,7 +89,7 @@ Known issues
 Development repo
 ****************
 
-* `lib_xplug <https://www.github.com/xross/lib_xplug>`_ (https://www.github.com/xross/lib_xplug)
+* `lib_xtnd <https://www.github.com/xross/lib_xtnd>`_ (https://www.github.com/xross/lib_xtnd)
 
 **************
 Required tools
