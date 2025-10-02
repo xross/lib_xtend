@@ -1,0 +1,7 @@
+
+Test naming scheme
+==================
+
+test_xtnd_<?mt>_<host language>_<xtnder language>_<est_feature>
+
+mt = "multi-tile" i.e. an XC multi-tile main is used for the host application

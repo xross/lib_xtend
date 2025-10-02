@@ -36,11 +36,18 @@ Features
 TODO
 ****
 
+* Make tests use some shared code...
+    * C/XC
+    * python
+*h  Add test for timer pollution
+* Read mem_len before mallocing space for blob
+
 * Thread local timers work because timer for thread 0 is always set as 1 in the timers table
    - This means it will be shared between the host and plugin - could be a problem
    - Consider problem case and add test
 * What is a plugin spawns a thread and uses a timer?
 * Add a free function to unload the xtender
+* Move test xtenders outside of the test apps such that multiple test apps can use the same xtnder
 * Use a single tile xn when building the xtender
 * use xmap --first FILE rather than ordering of src files to xcc
 * Split ASSP and author and user documentation
@@ -48,7 +55,6 @@ TODO
 * Deal with current fixed int f(int, int) signature
 * Documentation improvements
 * Remove debug prints (use lib_logging)
-* Make tests use some shared code...
 * Add hashing for function names
 * Support sharing a lock between host and plugin?
 * Run destructors

@@ -39,12 +39,12 @@ static int xtend_run_ctors(const xtend_table_t *t)
 
 xtend_status_t xtend_free(xtend_table_t *t)
 {
-    /* Free allocated lock */
+    /* TODO Free allocated lock */
 
     return XTEND_OK;
 }
 
-xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t)
+xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
 {
     if (!blob || !t)
         return XTEND_ERR_INPUT;
@@ -87,7 +87,13 @@ xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t)
     t->ctors_base  = blob + h->ctors_off;
     t->ctors_count = (h->ctors_end_off - h->ctors_off) / sizeof(uint32_t);
 
-    /* TODO check there is enough space for the bss/bss.large */
+    if(maxSize < h->mem_len)
+    {
+        /* TODO check there is enough space for the bss/bss.large */
+        printf("[xtend] mem available: %d bytes. Required: %d bytes\n", (int)maxSize, (int)h->mem_len);
+        return XTEND_ERR_SIZE;
+    }
+
     /*zero the bss section */
     for (int i = 0; i < (int)(h->mem_len - h->init_len); i++)
     {

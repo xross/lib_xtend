@@ -86,7 +86,8 @@ typedef enum xtend_status {
     XTEND_ERR_LAYOUT = 5,   /* Arrays exceed blob length */
     XTEND_ERR_CPDP_MIS = 6, /* cp_off/dp_off misaligned */
     XTEND_ERR_CPDP_OOB = 7, /* cp_off/dp_off out of bounds */
-    XTEND_ERR_CTORS = 8     /* Error running ctors */
+    XTEND_ERR_CTORS = 8,    /* Error running ctors */
+    XTEND_ERR_SIZE = 9,     /* Not enough space for blob */
 } xtend_status_t;
 
 /* Read an xtender from flash
@@ -95,7 +96,7 @@ typedef enum xtend_status {
 int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size);
 
 /* Parse & validate an export table blob. Returns XTEND_OK on success. */
-xtend_status_t xtend_init(uint8_t *blob, xtend_table_t *t);
+xtend_status_t xtend_init(uint8_t *blob, size_t blob_space_size, xtend_table_t *t);
 
 /* Locate a function by name. Returns pointer or NULL. */
 void *xtend_find(const xtend_table_t *t, const char *name);
