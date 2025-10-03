@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.21)
 include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 project(xtend_tests)
 
+# Default base address for xtender images used in tests
+set(XTND_BASE_ADDR "0x00084000" CACHE STRING "Absolute base address where the xtender header (xtend_exports) will be placed")
+
 include(${CMAKE_CURRENT_LIST_DIR}/../xtnd_utils.cmake)
 
 add_subdirectory(test_xtnd_c_c_global)

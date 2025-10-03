@@ -9,8 +9,8 @@
 #include "xcore/hwtimer.h"
 #include "quadflash.h"
 
-#ifndef XTEND_IMAGE_ADDR
-#error "XTEND_IMAGE_ADDR must be defined"
+#ifndef XTND_BASE_ADDR
+#error "XTND_BASE_ADDR must be defined"
 #endif
 
 #define XTEND_IMAGE_MAX_SIZE (5000)
@@ -26,7 +26,7 @@ int simpleI2c(void)
 {
     hwtimer_t timer = hwtimer_alloc();
 
-    int fail = xtend_read(spiPort, (uint8_t *) XTEND_IMAGE_ADDR, XTEND_IMAGE_MAX_SIZE);
+    int fail = xtend_read(spiPort, (uint8_t *) XTND_BASE_ADDR, XTEND_IMAGE_MAX_SIZE);
 
     if (fail)
     {
@@ -34,7 +34,7 @@ int simpleI2c(void)
     }
 
     xtend_table_t tab;
-    xtend_status_t irc = xtend_init((uint8_t *)XTEND_IMAGE_ADDR, &tab);
+    xtend_status_t irc = xtend_init((uint8_t *)XTND_BASE_ADDR, XTEND_IMAGE_MAX_SIZE, &tab);
 
     if (irc != XTEND_OK)
     {
@@ -43,7 +43,7 @@ int simpleI2c(void)
     }
 
     printf("[app_test] exec_ram=%p magic=0x%08lX ver=%lu count=%lu\n",
-           (void*)XTEND_IMAGE_ADDR, tab.hdr->magic, tab.hdr->version, tab.hdr->count);
+           (void*)XTND_BASE_ADDR, tab.hdr->magic, tab.hdr->version, tab.hdr->count);
 
     printf("[app_test] cp=%p dp=%p cp_off=0x%08lX dp_off=0x%08lX\n",
            tab.cp_base,tab.dp_base, tab.hdr->cp_off, tab.hdr->dp_off);

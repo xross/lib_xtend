@@ -9,8 +9,8 @@
 #include "xtnd.h"
 #include "xtend_blob.h"
 
-#ifndef XTEND_IMAGE_ADDR
-#error "XTEND_IMAGE_ADDR must be defined"
+#ifndef XTND_BASE_ADDR
+#error "XTND_BASE_ADDR must be defined"
 #endif
 
 int main(void)
@@ -18,11 +18,11 @@ int main(void)
     int memSize = xtend_blob_bin_len + 100;
 
     /* Move the blob to a known location in memory */
-    memcpy((void*)XTEND_IMAGE_ADDR, xtend_blob_bin, xtend_blob_bin_len);
+    memcpy((void*)XTND_BASE_ADDR, xtend_blob_bin, xtend_blob_bin_len);
 
     xtend_table_t tab;
 
-    xtend_status_t irc = xtend_init((uint8_t *)XTEND_IMAGE_ADDR, memSize, &tab);
+    xtend_status_t irc = xtend_init((uint8_t *)XTND_BASE_ADDR, memSize, &tab);
 
     if (irc != XTEND_OK)
     {

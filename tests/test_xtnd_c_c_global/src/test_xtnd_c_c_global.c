@@ -10,17 +10,18 @@
 #include "xtend_blob.h"
 #include "xtnd_test_config.h"
 
+#ifndef XTND_BASE_ADDR
+#error "XTND_BASE_ADDR must be defined"
+#endif
+
 int main(void)
 {
     xtend_table_t tab;
-
-    /* TODO use mem_len from header for proper size */
     int memSize = XTND_TEST_BLOB_ALLOC_SIZE;
-    uint8_t *blob = malloc(memSize);
 
-    memcpy(blob, xtend_blob_bin, xtend_blob_bin_len);
+    memcpy((void*)XTND_BASE_ADDR, xtend_blob_bin, xtend_blob_bin_len);
 
-    xtend_status_t irc = xtend_init(blob, memSize, &tab);
+    xtend_status_t irc = xtend_init((uint8_t*)XTND_BASE_ADDR, memSize, &tab);
 
     if (irc != XTEND_OK)
     {

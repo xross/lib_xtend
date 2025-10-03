@@ -97,7 +97,7 @@ typedef enum xtend_status {
     XTEND_ERR_SIZE = 9,     /* Not enough space for blob */
 } xtend_status_t;
 
-/* Read an xtender from flash
+/* Read an xtnder from flash
  * Returns 0 on success, else flash error code
  */
 int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size);

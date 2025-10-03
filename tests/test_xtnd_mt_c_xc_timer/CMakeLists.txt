@@ -9,7 +9,7 @@ set(APP_INCLUDES src ../)
 
 set(APP_HW_TARGET               XK-EVK-XU316)
 
-set(COMPILER_FLAGS_COMMON       -O3 -Wall -lquadflash)
+set(COMPILER_FLAGS_COMMON       -O3 -Wall -lquadflash -DXTND_BASE_ADDR=${XTND_BASE_ADDR})
 
 set(APP_COMPILER_FLAGS_t0          ${COMPILER_FLAGS_COMMON} -DTHREAD_NUM=0)
 

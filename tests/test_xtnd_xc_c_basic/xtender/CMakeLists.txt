@@ -8,6 +8,7 @@ set(APP_HW_TARGET XU316-1024-QF60B-C24)
 set(APP_COMPILER_FLAGS  -O0
                         -mno-dual-issue
                         -nostartfiles
+                        -Wl,--image-base,${XTND_BASE_ADDR}
                     )
 
 set(APP_ASM_SRCS ./src/xtender_exports.S)

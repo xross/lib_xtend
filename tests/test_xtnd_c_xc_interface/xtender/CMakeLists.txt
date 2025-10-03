@@ -11,7 +11,7 @@ set(APP_COMPILER_FLAGS  -O2
                         -save-temps
                         -fasm-linenum
                         -fcomment-asm
-                        -Wl,--image-base,${XTEND_IMAGE_ADDR}
+                        -Wl,--image-base,${XTND_BASE_ADDR}
                     )
 
 # This is a hack to ensure that the xtender_exports.S file is passed to the compiler first.

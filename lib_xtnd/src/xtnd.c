@@ -1,7 +1,7 @@
 #include "xtnd.h"
 
-#if defined(XTEND_IMAGE_ADDR)
-#define BASE_ADDR XTEND_IMAGE_ADDR
+#if defined(XTND_BASE_ADDR)
+#define BASE_ADDR XTND_BASE_ADDR
 #else
 #define BASE_ADDR XS1_RAM_BASE
 #endif

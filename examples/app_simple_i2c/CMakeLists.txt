@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 
 # Default xtender (single) base address (header/image base)
-set(XTEND_IMAGE_ADDR "0x00084000" CACHE STRING
+set(XTND_BASE_ADDR "0x00084000" CACHE STRING
     "Absolute base address where the xtender header (xtend_exports) will be placed")
 
 
@@ -13,7 +13,7 @@ add_subdirectory(xtender)
 set(APP_HW_TARGET XK-EVK-XU316)
 
 set(APP_COMPILER_FLAGS   -g -O2 -lquadflash
-                         -DXTEND_IMAGE_ADDR=${XTEND_IMAGE_ADDR})
+                         -DXTND_BASE_ADDR=${XTND_BASE_ADDR})
 
 set(APP_DEPENDENT_MODULES "lib_xtnd")
 

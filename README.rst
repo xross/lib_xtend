@@ -37,18 +37,18 @@ TODO
 ****
 
 * All tests and examples should use a fixed a address when loading the xtnder
+* is there a better way to handle fixed addrees and size of xtnder?
 * In tests use a shared set of xtenders rather than building them into each test app
-* Read mem_len before mallocing space for blob(?)
+* Add a free function to unload the xtender - write a test
+* Deal with current fixed int f(int, int) signature
 * What is a plugin spawns a thread and uses a timer?
 * There is potential issue with pollution of timers between host and plugins when using xc pool
   timers, however, it's been hard to make a test case for this as the xc compiler seems to fully
   setup a timer event properly when used or simply uses the gettime instuction.
-* Add a free function to unload the xtender
 * Use a single tile xn when building the xtender
 * use xmap --first FILE rather than ordering of src files to xcc
 * Split ASSP and author and user documentation
 * Check for fn count > number of functions in blob
-* Deal with current fixed int f(int, int) signature
 * Documentation improvements
 * Remove debug prints (use lib_logging)
 * Add hashing for function names
