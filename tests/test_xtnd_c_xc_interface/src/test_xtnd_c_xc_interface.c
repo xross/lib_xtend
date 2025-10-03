@@ -9,13 +9,15 @@
 #include "xtnd.h"
 #include "xtend_blob.h"
 
+#include "xtnd_test_config.h"
+
 #ifndef XTEND_IMAGE_ADDR
 #error "XTEND_IMAGE_ADDR must be defined"
 #endif
 
 int main(void)
 {
-    int memSize = xtend_blob_bin_len + 100;
+    int memSize = XTND_TEST_BLOB_ALLOC_SIZE;
 
     /* Move the blob to a known location in memory */
     memcpy((void*)XTEND_IMAGE_ADDR, xtend_blob_bin, xtend_blob_bin_len);

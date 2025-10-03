@@ -10,9 +10,13 @@
 
 #include <xs1.h>
 
-/* Offsets (in words) within xtend_table_t (used in assembly) */
+/* Offsets (in words) within xtend_table_t (used in assembly)
+ * These are word indices (uint32_t sized) from the start of xtend_table on target (32-bit).
+ * Update if struct layout changes. (Pointers and size_t assumed 4 bytes on target.)
+ */
 #define XTEND_OFF_CP_BASE_WORDS     (6)
 #define XTEND_OFF_DP_BASE_WORDS     (7)
+#define XTEND_OFF_TIMERS_BASE_WORDS (10)
 
 #define XTEND_EXPORT_MAGIC          (0x58544E44u) /* "XTND" */
 #define XTEND_EXPORT_VERSION        (1)
@@ -44,9 +48,10 @@ typedef struct xtend_header {
     uint32_t ctors_off;
     uint32_t ctors_end_off;
     uint32_t syscall_off;
+    uint32_t timers_off;      /* Offset to timers table (optional, 0 if none) */
     uint32_t init_len;        /* Length of code/data stored in flash */
     uint32_t mem_len;         /* Complete length of memoery required */
-    uint32_t count;           /* Exported function count */
+    uint32_t fn_count;        /* Exported function count */
 } xtend_header_t;
 
 typedef struct xtend_table {
@@ -60,6 +65,7 @@ typedef struct xtend_table {
     const uint8_t * UNSAFE dp_base;    /* blob_base + hdr->dp_off */
     const uint8_t * UNSAFE ctors_base; /* blob_base + hdr->ctors_off */
     uint32_t ctors_count;
+    const uint8_t * UNSAFE timers_base; /* blob_base + hdr->timers_off (optional) */
 } xtend_table_t;
 
 /* Call a plugin function */
@@ -68,10 +74,11 @@ int xtend_call(const xtend_table_t * UNSAFE t, void * UNSAFE fn, unsigned a0, un
 #if !defined(__XC__)
 
 /* Export table layout :
- *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, init_len, mem_len,
- *   count, fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
+ *   magic, version(1), cp_off, dp_off, ctors_off, ctors_end_off, syscall_off, timers_off,
+ *   init_len, mem_len, fn_count, fn_offs[count], name_offs[count], string pool (ASCIZ...), align4.
  *
  * Offsets are all relative to the start of the table (xtend_header_t base).
+ * timers_off may be 0 if the plugin does not export a timers table.
  */
 
 typedef int (*xtend_fn_t)(unsigned, unsigned);
@@ -103,6 +110,7 @@ void *xtend_find(const xtend_table_t *t, const char *name);
 
 _Static_assert(XTEND_OFF_CP_BASE_WORDS * sizeof(uint32_t) == offsetof(struct xtend_table, cp_base), "offset changed: cp_base");
 _Static_assert(XTEND_OFF_DP_BASE_WORDS * sizeof(uint32_t) == offsetof(struct xtend_table, dp_base), "offset changed: dp_base");
+_Static_assert(XTEND_OFF_TIMERS_BASE_WORDS * sizeof(uint32_t) == offsetof(struct xtend_table, timers_base), "offset changed: timers_base");
 
 #endif
 #endif

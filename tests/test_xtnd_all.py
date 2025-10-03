@@ -8,14 +8,8 @@ from xtnd_test_util import discover_cases, run_xtnd_test
 CASES = discover_cases()
 
 # Map of (stem, variant) to reason for expected failure.
-# Populate all discovered t1 variants as XFAIL for now until validated.
 XFAILS = {
-    (stem, variant): "t1 variant currently expected to fail"
-    for (stem, variant) in CASES
-    if variant == "t1"
 }
-# Explicitly XFAIL isolation timer test (base) pending fix.
-#XFAILS[("test_xtnd_xc_xc_timer_isolation", None)] = "Isolation test currently expected to fail"
 
 
 def _case_id(param):

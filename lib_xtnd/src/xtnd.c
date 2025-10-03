@@ -60,12 +60,12 @@ xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
     if (h->version != XTEND_EXPORT_VERSION)
         return XTEND_ERR_VERSION;
 
-    uint32_t count = h->count;
+    const uint32_t fn_count = h->fn_count;
 
-    if (count > (h->init_len - sizeof(*h)) / (sizeof(uint32_t) * 2u))
+    if (fn_count > (h->init_len - sizeof(*h)) / (sizeof(uint32_t) * 2u))
         return XTEND_ERR_COUNT;
 
-    size_t arrays_bytes = (size_t)count * sizeof(uint32_t) * 2u;
+    size_t arrays_bytes = (size_t)fn_count * sizeof(uint32_t) * 2u;
     size_t prefix = sizeof(*h) + arrays_bytes;
     if (prefix > h->init_len)
         return XTEND_ERR_LAYOUT;
@@ -78,7 +78,7 @@ xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
 
     t->hdr         = h;
     t->fn_offs     = (const uint32_t *)(h + 1);
-    t->name_offs   = t->fn_offs + count;
+    t->name_offs   = t->fn_offs + fn_count;
     t->strings     = (const char *)blob + prefix;
     t->strings_len = h->init_len - prefix;
     t->blob_base   = blob;
@@ -86,6 +86,16 @@ xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
     t->dp_base     = blob + h->dp_off;
     t->ctors_base  = blob + h->ctors_off;
     t->ctors_count = (h->ctors_end_off - h->ctors_off) / sizeof(uint32_t);
+
+    /* Optional timers table */
+    if (h->timers_off && h->timers_off < h->init_len && (h->timers_off % 4u) == 0)
+    {
+        t->timers_base = blob + h->timers_off;
+    }
+    else
+    {
+        t->timers_base = NULL;
+    }
 
     if(maxSize < h->mem_len)
     {
@@ -114,8 +124,8 @@ void *xtend_find(const xtend_table_t *t, const char *name)
         return NULL;
     }
 
-    uint32_t count = t->hdr->count;
-    for (uint32_t i = 0; i < count; ++i)
+    uint32_t fn_count = t->hdr->fn_count;
+    for (uint32_t i = 0; i < fn_count; ++i)
     {
         uint32_t fn_off = t->fn_offs[i];
         uint32_t nm_off = t->name_offs[i];

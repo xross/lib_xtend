@@ -36,9 +36,9 @@ Features
 TODO
 ****
 
-* Fix test fail test_xtnd_suite[test_xtnd_mt_c_xc_timer[t1]]
+* All tests and examples should use a fixed a address when loading the xtnder
 * In tests use a shared set of xtenders rather than building them into each test app
-* Read mem_len before mallocing space for blob
+* Read mem_len before mallocing space for blob(?)
 * What is a plugin spawns a thread and uses a timer?
 * There is potential issue with pollution of timers between host and plugins when using xc pool
   timers, however, it's been hard to make a test case for this as the xc compiler seems to fully

@@ -28,21 +28,24 @@ xtend_call:
     ldw         r11, r0[r10]
     set         dp, r11              // DP := new_dp
 
-    // Check if a timer is allocated for this thread
-    ldaw        r10, dp[__timers]
-    get         r11, id
-    ldw         r9, r10[r11]
-    bt          r9, xtend_call.timer_ok
-xtend_call.timer_bad:
+    // r0 points to xtend_table; timers_base at XTEND_OFF_TIMERS_BASE_WORDS (may be NULL)
+    ldc         r10, XTEND_OFF_TIMERS_BASE_WORDS
+    ldw         r10, r0[r10]      // r10 = timers_base (or 0)
+    bt          r10, xtend_call.have_timers
+    bu          xtend_call.jump
+xtend_call.have_timers:
+    get         r11, id           // r11 = thread id index
+    ldw         r9, r10[r11]      // Load existing timer entry for thread
+    bt          r9, xtend_call.jump
+xtend_call.timer_alloc:
     getr        r9, XS1_RES_TYPE_TIMER
     stw         r9, r10[r11]
 
-xtend_call.timer_ok:
+xtend_call.jump:
     mov         r11, r1
     mov         r0, r2
     mov         r1, r3
 
-xtend_call.jump:
     bla         r11                   // Call fn
 
     // Anything with more than 4(?) returns wont work (unlikely..)
