@@ -26,19 +26,19 @@ int main(void)
 {
     hwtimer_t timer = hwtimer_alloc();
 
-    int fail = xtend_read(spiPort, (uint8_t *)XTND_BASE_ADDR, XTEND_IMAGE_MAX_SIZE);
+    int fail = xtnd_read(spiPort, (uint8_t *)XTND_BASE_ADDR, XTEND_IMAGE_MAX_SIZE);
 
     if (fail)
     {
-        printf("[app_test] xtend_read_flash failed %d\n", fail);
+        printf("[app_test] xtnd_read_flash failed %d\n", fail);
     }
 
-    xtend_table_t tab;
-    xtend_status_t irc = xtend_init((uint8_t *)XTND_BASE_ADDR, XTEND_IMAGE_MAX_SIZE, &tab);
+    xtnd_table_t tab;
+    xtnd_status_t irc = xtnd_init((uint8_t *)XTND_BASE_ADDR, XTND_IMAGE_MAX_SIZE, &tab);
 
     if (irc != XTEND_OK)
     {
-        printf("[app_test] xtend_init failed rc=%d\n", (int)irc);
+        printf("[app_test] xtnd_init failed rc=%d\n", (int)irc);
         return 1;
     }
 
@@ -48,7 +48,7 @@ int main(void)
     printf("[app_test] cp=%p dp=%p cp_off=0x%08lX dp_off=0x%08lX\n",
            tab.cp_base,tab.dp_base, tab.hdr->cp_off, tab.hdr->dp_off);
 
-    xtend_fn_t fn_port_toggle = (xtend_fn_t)xtend_find(&tab, "xtend_port_toggle");
+    xtnd_fn_t fn_port_toggle = (xtnd_fn_t)xtnd_find(&tab, "xtnd_port_toggle");
 
     if (!fn_port_toggle)
     {
@@ -61,7 +61,7 @@ int main(void)
         hwtimer_delay(timer, 10000000);
 
         /* Call the xtender function to toggle the port */
-        (void)xtend_call(&tab, (void*)fn_port_toggle, 1, 0);
+        (void)xtnd_call(&tab, (void*)fn_port_toggle, 1, 0);
     }
 
     return 0;

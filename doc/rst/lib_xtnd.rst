@@ -29,6 +29,17 @@ their own CODEC access functions, be it SPI, UART or I2C, with a call to ``xtend
 The system requires no special tools or libraries to build ``lib_xtnd`` into a
 application or, more importantly, to build an `xtender`, other than the standard `XMOS` XTC tool chain.
 
+Migration
+=========
+
+Recent renames standardise file and artifact names:
+
+- Export assembly: ``xtnder_exports.S`` (was ``xtender_export.S``)
+- C/XC stub: ``xtnder.c`` / ``xtnder.xc`` (formerly ``xtender.c`` / ``xtender.xc``)
+- Generated blob: ``xtnder_blob.bin`` + header ``xtnder_blob.h`` with array symbol ``xtnder_blob_bin`` (previously ``xtnd_blob.bin`` etc.)
+
+Update any existing build scripts or documentation to use the new names. The build helper functions in ``xtnd_utils.cmake`` now default to these identifiers.
+
 *****************
 Authoring an ASSP
 *****************
@@ -106,7 +117,7 @@ Authoring an `xtender`
 Coding an `xtender`
 ===================
 
-The ASSP provider will have provided a valid ``xtender_export.S`` file and a `xtender.c` file with
+The ASSP provider will have provided a valid ``xtnder_exports.S`` file and an `xtnder.c` file with
 function stubs that should be implemented.
 
 Position dependent code
@@ -149,7 +160,7 @@ Like any other `XMOS` code-base, it is recommended to use the ``xcommon-cmake`` 
 Once the ``xe`` has been built it needs transforming into a binary blob that can be programmed to a flash
 device. A `CMake` function is provided for convenience in `xtend_utils.cmake` called
 ``xtend_create_blob`` that can be used from the xtender's `CMakeLists.txt` file. By default this
-builds a file named ``xtend_blob.bin`` in the project ``bin`` directory. However, for
+builds a file named ``xtnder_blob.bin`` in the project ``bin`` directory. However, for
 completeness the steps are described below::
 
     xobjdump --strip plugin.xe -o plugin.xb
@@ -177,7 +188,7 @@ Programming a plugin
 Programming the binary blob containing the `xtender` into the data partition of the flash device
 using ``xflash``, remembering to allocated some space for the host application::
 
-    xflash --boot-partition-size=0x20000 --data ./xtender/bin/xtend_blob.bin --target=XK-EVK-XU316
+    xflash --boot-partition-size=0x20000 --data ./xtender/bin/xtnder_blob.bin --target=XK-EVK-XU316
 
 The main program can then be run as normal using `xrun`::
 
@@ -189,7 +200,7 @@ Or flashed for standalone operation::
 
 The `xtender` and the program can be flash in one command::
 
-    xflash --boot-partition-size=0x20000 --data ./xtender/bin/xtend_blob.bin --target=XK-EVK-XU316 ./bin/app_test.xe
+    xflash --boot-partition-size=0x20000 --data ./xtender/bin/xtnder_blob.bin --target=XK-EVK-XU316 ./bin/app_test.xe
 
 **********************
 Printing from a plugin
@@ -285,7 +296,7 @@ directory to flash the application and `xtender` to the target device and run it
 
 .. code-block:: bash
 
-    xflash ./bin/app_simple_port.xe --boot-partition-size=0x20000 --data .xtender/bin/xtend_blob.bin --target=XK-EVK-XU316
+    xflash ./bin/app_simple_port.xe --boot-partition-size=0x20000 --data .xtender/bin/xtnder_blob.bin --target=XK-EVK-XU316
 
 The example host  application calls the `xtender` function ``xtend_port_toggle`` in a loop with a delay.
 The LEDs marked 0, 1, 2, 3 on the `XK-EVK-XU316` board should toggle on and off.

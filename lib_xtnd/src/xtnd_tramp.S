@@ -1,14 +1,14 @@
 #include "xtnd.h"
 
-.globl xtend_call
-.type  xtend_call, @function
+.globl xtnd_call
+.type  xtnd_call, @function
 
 .align	4
-.cc_top xtend_call.function,xtend_call
+.cc_top xtnd_call.function,xtnd_call
 
 // TODO Dual issue and optimise
 // Args: r0= tab, r1=fn, r2=a0, r3=a1
-xtend_call:
+xtnd_call:
     ENTSP_lu6     8
     stw r10, sp[3]
     stw r9, sp[4]
@@ -20,28 +20,28 @@ xtend_call:
     stw         r11, sp[2]           // save old DP
 
     // Set new CP, DP
-    ldc         r10, XTEND_OFF_CP_BASE_WORDS
+    ldc         r10, XTND_OFF_CP_BASE_WORDS
     ldw         r11, r0[r10]
     set         cp, r11              // CP := new_cp
 
-    ldc         r10, XTEND_OFF_DP_BASE_WORDS
+    ldc         r10, XTND_OFF_DP_BASE_WORDS
     ldw         r11, r0[r10]
     set         dp, r11              // DP := new_dp
 
-    // r0 points to xtend_table; timers_base at XTEND_OFF_TIMERS_BASE_WORDS (may be NULL)
-    ldc         r10, XTEND_OFF_TIMERS_BASE_WORDS
+    // r0 points to xtnd_table; timers_base at XTND_OFF_TIMERS_BASE_WORDS (may be NULL)
+    ldc         r10, XTND_OFF_TIMERS_BASE_WORDS
     ldw         r10, r0[r10]      // r10 = timers_base (or 0)
-    bt          r10, xtend_call.have_timers
-    bu          xtend_call.jump
-xtend_call.have_timers:
+    bt          r10, xtnd_call.have_timers
+    bu          xtnd_call.jump
+xtnd_call.have_timers:
     get         r11, id           // r11 = thread id index
     ldw         r9, r10[r11]      // Load existing timer entry for thread
-    bt          r9, xtend_call.jump
-xtend_call.timer_alloc:
+    bt          r9, xtnd_call.jump
+xtnd_call.timer_alloc:
     getr        r9, XS1_RES_TYPE_TIMER
     stw         r9, r10[r11]
 
-xtend_call.jump:
+xtnd_call.jump:
     mov         r11, r1
     mov         r0, r2
     mov         r1, r3
@@ -57,20 +57,21 @@ xtend_call.jump:
     ldw         r11, sp[2]
     set         dp, r11
 
-xtend_call.return:
+xtnd_call.return:
     ldw         r10, sp[3]
     ldw         r9, sp[4]
     retsp       8
 
     // TODO #define the stack words
-    .cc_bottom xtend_call.function
-	.set	xtend_call.nstackwords, XTND_CALL_STACK_WORDS
-	.globl	xtend_call.nstackwords
-	.set	xtend_call.maxcores,1
-	.globl	xtend_call.maxcores
-	.set	xtend_call.maxtimers,0
-	.globl	xtend_call.maxtimers
-	.set	xtend_call.maxchanends,0
-	.globl	xtend_call.maxchanends
+    .cc_bottom xtnd_call.function
+	.set	xtnd_call.nstackwords, XTND_CALL_STACK_WORDS
+	.globl	xtnd_call.nstackwords
+	.set	xtnd_call.maxcores,1
+	.globl	xtnd_call.maxcores
+	.set	xtnd_call.maxtimers,0
+	.globl	xtnd_call.maxtimers
+	.set	xtnd_call.maxchanends,0
+	.globl	xtnd_call.maxchanends
+
 
 

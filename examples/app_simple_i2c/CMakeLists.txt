@@ -8,7 +8,7 @@ set(XTND_BASE_ADDR "0x00084000" CACHE STRING
 
 project(app_simple_i2c)
 
-add_subdirectory(xtender)
+add_subdirectory(xtnder)
 
 set(APP_HW_TARGET XK-EVK-XU316)
 

@@ -7,7 +7,7 @@ set(XTND_BASE_ADDR "0x00084000" CACHE STRING
 
 project(app_simple_port)
 
-add_subdirectory(xtender)
+add_subdirectory(xtnder)
 
 set(APP_HW_TARGET XK-EVK-XU316)
 set(APP_COMPILER_FLAGS   -g -O2 -lquadflash

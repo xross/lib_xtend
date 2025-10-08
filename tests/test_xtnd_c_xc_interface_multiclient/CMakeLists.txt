@@ -5,7 +5,7 @@ include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 set(XTND_BASE_ADDR "0x00084000" CACHE STRING
     "Absolute base address where the xtender header (xtend_exports) will be placed")
 
-add_subdirectory(xtender)
+add_subdirectory(xtnder)
 
 project(test_xtnd_c_xc_interface_multiclient)
 

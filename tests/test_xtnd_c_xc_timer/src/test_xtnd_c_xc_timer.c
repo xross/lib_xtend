@@ -7,7 +7,7 @@
 #include <print.h>
 #include "xtnd.h"
 
-#include "xtend_blob.h"
+#include "xtnder_blob.h"
 #include "xtnd_test_config.h"
 
 #ifndef XTND_BASE_ADDR
@@ -16,30 +16,30 @@
 
 int main(void)
 {
-    xtend_table_t tab;
+    xtnd_table_t tab;
     int memSize = XTND_TEST_BLOB_ALLOC_SIZE;
 
-    memcpy((void*)XTND_BASE_ADDR, xtend_blob_bin, xtend_blob_bin_len);
+    memcpy((void*)XTND_BASE_ADDR, xtnder_blob_bin, xtnder_blob_bin_len);
 
-    xtend_status_t irc = xtend_init((uint8_t*)XTND_BASE_ADDR, memSize, &tab);
+    xtnd_status_t irc = xtnd_init((uint8_t*)XTND_BASE_ADDR, memSize, &tab);
 
-    if (irc != XTEND_OK)
+    if (irc != XTND_OK)
     {
-        printf("[SIM] xtend_table_init failed rc=%d\n", (int)irc);
+        printf("[SIM] xtnd_table_init failed rc=%d\n", (int)irc);
         return 1;
     }
 
-    xtend_fn_t fn_delay   = (xtend_fn_t)xtend_find(&tab, "xtend_delay");
+    xtnd_fn_t fn_delay   = (xtnd_fn_t)xtnd_find(&tab, "xtnd_delay");
 
     if (!fn_delay)
     {
-        printf("[SIM] Failed to resolve plugin function xtend_delay=%p\n", (void*)fn_delay);
+        printf("[SIM] Failed to resolve plugin function xtnd_delay=%p\n", (void*)fn_delay);
         return 1;
     }
 
     int delayA = 100;
     int delayB = 200;
-    int rc_delay = xtend_call(&tab, (void*)fn_delay, delayA, delayB);
+    int rc_delay = xtnd_call(&tab, (void*)fn_delay, delayA, delayB);
 
     if((delayA > delayB) && (rc_delay == delayB))
         printstrln("PASS");

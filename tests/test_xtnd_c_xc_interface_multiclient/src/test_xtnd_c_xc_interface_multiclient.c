@@ -7,7 +7,7 @@
 #include <print.h>
 
 #include "xtnd.h"
-#include "xtend_blob.h"
+#include "xtnder_blob.h"
 
 #ifndef XTND_BASE_ADDR
 #error "XTND_BASE_ADDR must be defined"
@@ -15,23 +15,23 @@
 
 int main(void)
 {
-    int memSize = xtend_blob_bin_len + 100;
+    int memSize = xtnder_blob_bin_len + 100;
 
     /* Move the blob to a known location in memory */
-    memcpy((void*)XTND_BASE_ADDR, xtend_blob_bin, xtend_blob_bin_len);
+    memcpy((void*)XTND_BASE_ADDR, xtnder_blob_bin, xtnder_blob_bin_len);
 
-    xtend_table_t tab;
+    xtnd_table_t tab;
 
-    xtend_status_t irc = xtend_init((uint8_t *)XTND_BASE_ADDR, memSize, &tab);
+    xtnd_status_t irc = xtnd_init((uint8_t *)XTND_BASE_ADDR, memSize, &tab);
 
-    if (irc != XTEND_OK)
+    if (irc != XTND_OK)
     {
-        printf("[SIM] xtend_table_init failed rc=%d\n", (int)irc);
+        printf("[SIM] xtnd_table_init failed rc=%d\n", (int)irc);
         return 1;
     }
 
-    xtend_fn_t fn_add   = (xtend_fn_t)xtend_find(&tab, "xtend_add");
-    xtend_fn_t fn_sub   = (xtend_fn_t)xtend_find(&tab, "xtend_sub");
+    xtnd_fn_t fn_add   = (xtnd_fn_t)xtnd_find(&tab, "xtnd_add");
+    xtnd_fn_t fn_sub   = (xtnd_fn_t)xtnd_find(&tab, "xtnd_sub");
 
     if (!fn_add)
     {
@@ -45,8 +45,8 @@ int main(void)
         return 1;
     }
 
-    int rc_add   = xtend_call(&tab, (void*)fn_add, 4, 5);
-    int rc_sub   = xtend_call(&tab, (void*)fn_sub, 4, 5);
+    int rc_add   = xtnd_call(&tab, (void*)fn_add, 4, 5);
+    int rc_sub   = xtnd_call(&tab, (void*)fn_sub, 4, 5);
 
     if((rc_add == 9) && (rc_sub == -1))
     {

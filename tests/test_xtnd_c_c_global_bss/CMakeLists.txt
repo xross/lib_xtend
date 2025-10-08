@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 
-add_subdirectory(xtender)
+add_subdirectory(xtnder)
 
 project(test_xtnd_c_c_global_bss)
 
@@ -17,4 +17,4 @@ set(XMOS_SANDBOX_DIR ${CMAKE_CURRENT_LIST_DIR}/../../..)
 
 XMOS_REGISTER_APP()
 
-add_dependencies(test_xtnd_c_c_global_bss blob_xtender_c_global_bss)
+add_dependencies(test_xtnd_c_c_global_bss blob_xtnd_c_global_bss)

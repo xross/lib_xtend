@@ -8,7 +8,7 @@
 #define XTND_TEST_BLOB_BSS_SLACK_BYTES 128
 #endif
 
-/* Provided by generated blob header (xtend_blob_bin_len). */
-#define XTND_TEST_BLOB_ALLOC_SIZE (xtend_blob_bin_len + XTND_TEST_BLOB_BSS_SLACK_BYTES)
+/* Provided by generated blob header (xtnder_blob_bin_len). */
+#define XTND_TEST_BLOB_ALLOC_SIZE (xtnder_blob_bin_len + XTND_TEST_BLOB_BSS_SLACK_BYTES)
 
 #endif /* XTND_TEST_CONFIG_H_ */

@@ -16,9 +16,21 @@ lib_xtnd: Plugins for xcore
 Summary
 *******
 
-``lib_xtnd`` (xcore Tactical Node Delivery) allows load and execution of code from flash (not XIP) where the whole application is
-not known at compile time. This is useful for applications that wish to allow some limited form of
-extensibililty by a user, for example for adding custom code to an ASSP.
+``lib_xtnd`` (xcore Tactical Node Delivery) allows load and execution of code from flash (not XIP)
+where the whole application is not known at compile time.
+This is useful for applications that wish to allow some limited form of extensibililty by a user,
+for example for adding custom code to an ASSP.
+
+Migration
+=========
+
+Recent renames standardise file and artifact names:
+
+- ``xtnder_exports.S`` (export table, was ``xtender_export.S``)
+- ``xtnder.c`` / ``xtnder.xc`` (was ``xtender.c`` / ``xtender.xc``)
+- Generated blob artifacts now ``xtnder_blob.bin`` + ``xtnder_blob.h`` with symbol ``xtnder_blob_bin`` (was ``xtnd_blob.bin`` / ``xtnd_blob.h`` / ``xtnd_blob_bin``)
+
+Update any existing build scripts or includes accordingly. Helper CMake functions in ``xtnd_utils.cmake`` now default to these names.
 
 ********
 Features
@@ -37,7 +49,7 @@ TODO
 ****
 
 * All tests and examples should use a fixed a address when loading the xtnder
-* is there a better way to handle fixed addrees and size of xtnder?
+* is there a better way to handle fixed address and size of xtnder?
 * In tests use a shared set of xtenders rather than building them into each test app
 * Add a free function to unload the xtender - write a test
 * Deal with current fixed int f(int, int) signature

@@ -9,7 +9,7 @@
 /* Runs contructors from ctors table
  * Returns number run, or -1 on error
  */
-static int xtend_run_ctors(const xtend_table_t *t)
+static int xtnd_run_ctors(const xtnd_table_t *t)
 {
     if (!t || !t->ctors_base)
     {
@@ -31,50 +31,50 @@ static int xtend_run_ctors(const xtend_table_t *t)
             return -1;
         }
         void *fn = (void *)(t->blob_base + off);
-        (void)xtend_call(t, fn, 0, 0);
+        (void)xtnd_call(t, fn, 0, 0);
         ran++;
     }
     return ran;
 }
 
-xtend_status_t xtend_free(xtend_table_t *t)
+xtnd_status_t xtnd_free(xtnd_table_t *t)
 {
     /* TODO Free allocated lock */
 
-    return XTEND_OK;
+    return XTND_OK;
 }
 
-xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
+xtnd_status_t xtnd_init(uint8_t *blob, size_t maxSize, xtnd_table_t *t)
 {
     if (!blob || !t)
-        return XTEND_ERR_INPUT;
+        return XTND_ERR_INPUT;
 
-    const xtend_header_t *h = (const xtend_header_t *)blob;
+    const xtnd_header_t *h = (const xtnd_header_t *)blob;
 
-#ifdef XTEND_OUTPUT_SYSCALL_ADDR
+#ifdef XTND_OUTPUT_SYSCALL_ADDR
     printhexln(blob + h->syscall_off);
 #endif
 
-    if (h->magic != XTEND_EXPORT_MAGIC)
-        return XTEND_ERR_MAGIC;
-    if (h->version != XTEND_EXPORT_VERSION)
-        return XTEND_ERR_VERSION;
+    if (h->magic != XTND_EXPORT_MAGIC)
+        return XTND_ERR_MAGIC;
+    if (h->version != XTND_EXPORT_VERSION)
+        return XTND_ERR_VERSION;
 
     const uint32_t fn_count = h->fn_count;
 
     if (fn_count > (h->init_len - sizeof(*h)) / (sizeof(uint32_t) * 2u))
-        return XTEND_ERR_COUNT;
+        return XTND_ERR_COUNT;
 
     size_t arrays_bytes = (size_t)fn_count * sizeof(uint32_t) * 2u;
     size_t prefix = sizeof(*h) + arrays_bytes;
     if (prefix > h->init_len)
-        return XTEND_ERR_LAYOUT;
+        return XTND_ERR_LAYOUT;
 
     if ((h->cp_off & 3u) || (h->dp_off & 3u))
-        return XTEND_ERR_CPDP_MIS;
+        return XTND_ERR_CPDP_MIS;
 
     if (h->cp_off > h->init_len || h->dp_off > h->init_len)
-        return XTEND_ERR_CPDP_OOB;
+        return XTND_ERR_CPDP_OOB;
 
     t->hdr         = h;
     t->fn_offs     = (const uint32_t *)(h + 1);
@@ -99,8 +99,8 @@ xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
 
     if(maxSize < h->mem_len)
     {
-        printf("[xtend] mem available: %d bytes. Required: %d bytes\n", (int)maxSize, (int)h->mem_len);
-        return XTEND_ERR_SIZE;
+        printf("[xtnd] mem available: %d bytes. Required: %d bytes\n", (int)maxSize, (int)h->mem_len);
+        return XTND_ERR_SIZE;
     }
 
     /* Zero the bss section */
@@ -109,15 +109,15 @@ xtend_status_t xtend_init(uint8_t *blob, size_t maxSize, xtend_table_t *t)
         t->blob_base[h->init_len + i] = 0;
     }
 
-    int ctors_ran = xtend_run_ctors(t);
+    int ctors_ran = xtnd_run_ctors(t);
 
     if (ctors_ran < 0)
-        return XTEND_ERR_CTORS;
+        return XTND_ERR_CTORS;
 
-    return XTEND_OK;
+    return XTND_OK;
 }
 
-void *xtend_find(const xtend_table_t *t, const char *name)
+void *xtnd_find(const xtnd_table_t *t, const char *name)
 {
     if (!t || !name)
     {
@@ -152,13 +152,13 @@ void *xtend_find(const xtend_table_t *t, const char *name)
     return NULL;
 }
 
-int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size)
+int xtnd_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size)
 {
-    /* Check we have enough space for at least the xtend header */
-    if(blob_space_size < sizeof(xtend_header_t))
+    /* Check we have enough space for at least the xtnd header */
+    if(blob_space_size < sizeof(xtnd_header_t))
     {
-        printf("[xtend] ERROR: MAX_XTEND_BLOB_SIZE %d is smaller than xtend_header_t %d\n",
-               blob_space_size, (int)sizeof(xtend_header_t));
+        printf("[xtnd] ERROR: MAX_XTND_BLOB_SIZE %d is smaller than xtnd_header_t %d\n",
+               blob_space_size, (int)sizeof(xtnd_header_t));
         return 1;
     }
 
@@ -169,26 +169,26 @@ int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size
         return fail;
 
     /* Read enough data for the header */
-    fail = fl_readData(0, sizeof(xtend_header_t), blob_space);
+    fail = fl_readData(0, sizeof(xtnd_header_t), blob_space);
 
     if (fail)
         return fail;
 
-    const xtend_header_t *h = (const xtend_header_t *) blob_space;
-    printf("[xtend] blob size = %lu bytes\n", h->init_len);
+    const xtnd_header_t *h = (const xtnd_header_t *) blob_space;
+    printf("[xtnd] blob size = %lu bytes\n", h->init_len);
 
     /* Check the data partition  is actually large enough to store the reported blob lenght */
     int dataPartitionSize_bytes = fl_getDataPartitionSize();
     if(dataPartitionSize_bytes < h->init_len)
     {
-        printf("[xtend] ERROR: Data partition size %d bytes is smaller than blob size %lu bytes\n",
+        printf("[xtnd] ERROR: Data partition size %d bytes is smaller than blob size %lu bytes\n",
                dataPartitionSize_bytes, h->init_len);
         return 1;
     }
 
     if(h->init_len > blob_space_size)
     {
-        printf("[xtend] ERROR: MAX_XTEND_BLOB_SIZE %d is smaller than blob size %lu bytes\n",
+        printf("[xtnd] ERROR: MAX_XTND_BLOB_SIZE %d is smaller than blob size %lu bytes\n",
                blob_space_size, h->init_len);
         return 1;
     }
@@ -201,4 +201,3 @@ int xtend_read(fl_QSPIPorts spiPort, uint8_t *blob_space, size_t blob_space_size
 
     return 0;
 }
-
