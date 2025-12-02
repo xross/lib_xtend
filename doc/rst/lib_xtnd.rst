@@ -102,7 +102,8 @@ secure boot and secure flash to enure than only trusted code is executed on the 
 Since ``lib_xtnd`` allows custom code to be executed on the device it is important to guard against
 AES key leakage.
 
-*TODO CHECK DEFAULT XBURN BEHAVIOUR AND PROVIDE GUIDANCE*
+When making the flash image via xflash the --disable-otp setting must be used.  Note, this is the default
+behaviour when the --key option is used.
 
 Additionally it must be accepted that a malicious user may write code that attempts to run completely
 unrestricted code on the device, mimicking an unrestricted part. This risk must be accepted
